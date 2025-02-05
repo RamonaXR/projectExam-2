@@ -13,7 +13,7 @@ export default function Header() {
       {/* Logo */}
       <div className="flex items-center">
         <img
-          src="/public/logoholidaze.svg"
+          src="/logoholidaze.svg"
           alt="Holidaze Logo"
           className="h-8 w-auto mr-4"
         />
