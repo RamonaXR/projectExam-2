@@ -2,13 +2,21 @@ import { Link } from "react-router-dom";
 import { FaWifi, FaPaw, FaUtensils, FaUserFriends } from "react-icons/fa";
 
 export default function VenueCard({ venue }) {
+  const imageUrl =
+    venue.media && venue.media[0]?.url
+      ? venue.media[0].url
+      : "/img/placeholdervenue-3.jpg";
   return (
     <Link to={`/venue/${venue.id}`}>
       <div className="border border-secondary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300">
         {/* Venue Image */}
         <img
-          src={venue.media[0]?.url || "/placeholder.jpg"}
-          alt={venue.media[0]?.alt || "Venue image"}
+          src={imageUrl}
+          alt={
+            venue.media && venue.media[0]?.alt
+              ? venue.media[0].alt
+              : "No photo available"
+          }
           className="w-full h-56 object-cover"
           loading="lazy"
         />
@@ -20,7 +28,7 @@ export default function VenueCard({ venue }) {
           {/* Owner Info */}
           <div className="flex items-center space-x-2 mb-3">
             <img
-              src={venue.owner?.avatar?.url || "/placeholder-avatar.jpg"}
+              src={venue.owner?.avatar?.url || "/img/placeholderavatar.jpg"}
               alt={venue.owner?.avatar?.alt || "Owner avatar"}
               className="w-9 h-9 rounded-full border border-gray-300"
             />
