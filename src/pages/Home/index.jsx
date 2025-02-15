@@ -7,7 +7,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative">
         <img
-          src="/img/heroholidaze.jpg"
+          src="/img/holidazehero2.jpg"
           alt="Hero image"
           className="w-full object-cover h-60 sm:h-80 md:h-96"
         />

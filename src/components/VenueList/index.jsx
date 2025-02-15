@@ -2,6 +2,8 @@ import { useRef, useEffect } from "react";
 import VenueCard from "../VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 import ErrorMessage from "../ErrorMessage";
+import SearchBar from "../SearchBar";
+import SortDropdown from "../SortDropdown";
 
 export default function VenueList() {
   const {
@@ -24,7 +26,7 @@ export default function VenueList() {
 
   const observerRef = useRef();
 
-  // Set up Intersection Observer for infinite scrolling
+  // Intersection Observer for infinite scrolling
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -45,41 +47,24 @@ export default function VenueList() {
 
   return (
     <div className="container mx-auto p-6">
-      {/* Search Bar */}
-      <div className="max-w-3xl mx-auto mb-4">
-        <div className="w-full flex flex-col sm:flex-row items-stretch gap-2">
-          <input
-            type="text"
-            className="w-full border border-gray-300 p-3 rounded-md text-lg min-w-0"
-            placeholder="Search venues..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && setSearchQuery(searchInput)}
-          />
-          <button
-            className="bg-button text-white px-5 py-3 rounded-md text-lg whitespace-nowrap"
-            onClick={() => setSearchQuery(searchInput)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
+      {/* Search Bar Component */}
+      <SearchBar
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        setSearchQuery={setSearchQuery}
+      />
+
+      {/* Sort Dropdown */}
       <div className="max-w-3xl mx-auto mb-6 text-right">
-        <select
-          className="border border-gray-300 p-3 rounded-md text-gray-700 text-lg"
-          value={`${sortBy}-${sortOrder}`}
-          onChange={(e) => {
-            const [newSortBy, newSortOrder] = e.target.value.split("-");
-            setSortBy(newSortBy);
-            setSortOrder(newSortOrder);
-          }}
-        >
-          <option value="created-desc">Latest</option>
-          <option value="created-asc">Oldest</option>
-          <option value="name-asc">A - Z</option>
-          <option value="name-desc">Z - A</option>
-        </select>
+        <SortDropdown
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          setSortBy={setSortBy}
+          setSortOrder={setSortOrder}
+        />
       </div>
+
+      {/* Venue Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {data.pages
           .flatMap((page) => page.data)
@@ -87,6 +72,7 @@ export default function VenueList() {
             <VenueCard key={venue.id} venue={venue} />
           ))}
       </div>
+
       {/* Infinite Scroll Trigger */}
       <div
         ref={observerRef}
