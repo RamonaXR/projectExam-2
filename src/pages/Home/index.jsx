@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import VenueList from "../../components/VenueList";
+import Button from "../../components/Button";
 
 export default function Home() {
   return (
-    <main className="space-y-10">
+    <div className="space-y-10">
       {/* Hero Section */}
       <section className="relative">
         <img
@@ -15,17 +16,18 @@ export default function Home() {
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Book your next holidaze!
           </h1>
-          <Link
+          <Button
+            as={Link}
             to="/register"
-            className="bg-button text-white px-8 py-3 rounded-md text-lg hover:bg-blue-700 transition-colors"
+            className="px-8 py-3 text-lg hover:bg-gray-500 transition-colors"
           >
             Register
-          </Link>
+          </Button>
         </div>
       </section>
       <section>
         <VenueList />
       </section>
-    </main>
+    </div>
   );
 }

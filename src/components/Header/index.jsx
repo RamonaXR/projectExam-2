@@ -4,63 +4,67 @@ import { useAuthStore } from "../../store/authStore";
 import { Link } from "react-router-dom";
 import MobileNav from "../MobileNav";
 import Nav from "../Nav";
+import Button from "../Button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLoggedIn, userProfile } = useAuthStore();
+  const { isLoggedIn, userProfile, setLogout } = useAuthStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="relative bg-white shadow-md">
+    <header className="bg-white shadow-md" role="banner">
       <div className="flex items-center justify-between p-4">
-        {/* Logo */}
-        <Link to="/">
-          <img
-            src="/logoholidaze.svg"
-            alt="Holidaze Logo"
-            className="h-8 w-auto"
-          />
-        </Link>
-        {/* Desktop Navigation & Auth*/}
-        <div className="hidden md:flex items-center space-x-6">
-          <Nav />
-          <div className="flex items-center space-x-4">
-            {isLoggedIn ? (
-              <Link
-                to="/profile"
-                className="bg-button text-white py-2 px-4 rounded-md"
-              >
-                {userProfile?.name || "My Profile"}
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="bg-button text-white py-2 px-4 rounded-md"
-                >
-                  Log in
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-button text-white py-2 px-4 rounded-md"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
+        <div className="flex items-center space-x-6">
+          <Link to="/" aria-label="Home">
+            <img
+              src="/logoholidaze.svg"
+              alt="Holidaze Logo"
+              className="h-8 w-auto"
+            />
+          </Link>
+          {isLoggedIn && (
+            <div className="hidden md:block">
+              <Nav />
+            </div>
+          )}
         </div>
-        {/* Mobile Hamburger */}
+
+        <div className="hidden md:flex items-center space-x-4">
+          {isLoggedIn ? (
+            <>
+              <Link to="/profile" className="flex items-center gap-2">
+                <img
+                  src={
+                    userProfile?.avatar?.url || "/img/placeholder-avatar.jpg"
+                  }
+                  alt={userProfile?.avatar?.alt || "User avatar"}
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="font-bold text-gray-700">
+                  {userProfile?.name}
+                </span>
+              </Link>
+              <Button onClick={setLogout} className="px-3 py-1 text-sm">
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button as={Link} to="/login">
+              Log in
+            </Button>
+          )}
+        </div>
+
         <button
           onClick={toggleMenu}
           className="md:hidden text-2xl text-gray-700 focus:outline-none"
-          aria-label="Toggle Menu"
+          aria-label="Toggle menu"
         >
           <FiMenu />
         </button>
       </div>
-      {/* Mobile Menu Overlay */}
+
       {isMenuOpen && <MobileNav toggleMenu={toggleMenu} />}
     </header>
   );
