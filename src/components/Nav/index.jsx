@@ -3,13 +3,15 @@ import { useAuthStore } from "../../store/authStore";
 
 export default function Nav() {
   const { isLoggedIn, userProfile } = useAuthStore();
+  const isVenueManager =
+    String(userProfile?.venueManager).toLowerCase() === "true";
 
   return (
-    <nav className="flex space-x-6">
-      {isLoggedIn && userProfile?.venueManager ? (
+    <nav className="flex space-x-6" aria-label="Primary navigation">
+      {isLoggedIn && isVenueManager ? (
         <>
           <NavLink
-            to="/add-venue"
+            to="/profile"
             className={({ isActive }) =>
               isActive ? "font-bold text-gray-900" : "font-bold text-gray-700"
             }
@@ -17,7 +19,7 @@ export default function Nav() {
             Add new venue
           </NavLink>
           <NavLink
-            to="/my-venues"
+            to="/profile"
             className={({ isActive }) =>
               isActive ? "font-bold text-gray-900" : "font-bold text-gray-700"
             }
@@ -27,7 +29,7 @@ export default function Nav() {
         </>
       ) : isLoggedIn ? (
         <NavLink
-          to="/my-bookings"
+          to="/profile"
           className={({ isActive }) =>
             isActive ? "font-bold text-gray-900" : "font-bold text-gray-700"
           }

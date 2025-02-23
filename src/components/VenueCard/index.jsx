@@ -1,22 +1,25 @@
 import { Link } from "react-router-dom";
 import { FaWifi, FaPaw, FaUtensils, FaUserFriends } from "react-icons/fa";
+import SafeImage from "../SafeImage";
 
 export default function VenueCard({ venue }) {
   const imageUrl =
     venue.media && venue.media[0]?.url
       ? venue.media[0].url
       : "/img/placeholdervenue-3.jpg";
+
   return (
     <Link to={`/venue/${venue.id}`}>
       <div className="border border-secondary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300">
         {/* Venue Image */}
-        <img
+        <SafeImage
           src={imageUrl}
           alt={
             venue.media && venue.media[0]?.alt
               ? venue.media[0].alt
-              : "No photo available"
+              : "Venue image"
           }
+          fallback="/img/placeholdervenue-3.jpg"
           className="w-full h-56 object-cover"
           loading="lazy"
         />
@@ -27,9 +30,10 @@ export default function VenueCard({ venue }) {
           </h3>
           {/* Owner Info */}
           <div className="flex items-center space-x-2 mb-3">
-            <img
+            <SafeImage
               src={venue.owner?.avatar?.url || "/img/placeholderavatar.jpg"}
               alt={venue.owner?.avatar?.alt || "Owner avatar"}
+              fallback="/img/placeholderavatar.jpg"
               className="w-9 h-9 rounded-full border border-gray-300"
             />
             <span className="text-sm text-gray-500">
@@ -37,26 +41,26 @@ export default function VenueCard({ venue }) {
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-gray-600 text-sm mb-3">
-            {/* Max Guests (Always Shown) */}
+            {/* Max Guests */}
             <div className="flex items-center gap-1">
               <FaUserFriends className="text-base" />
               <span>{venue.maxGuests} guests</span>
             </div>
-            {/* Breakfast (Only if true) */}
+            {/* Breakfast */}
             {venue.meta?.breakfast && (
               <div className="flex items-center gap-1">
                 <FaUtensils className="text-base" />
                 <span>Breakfast</span>
               </div>
             )}
-            {/* WiFi (Only if true) */}
+            {/* WiFi */}
             {venue.meta?.wifi && (
               <div className="flex items-center gap-1">
                 <FaWifi className="text-base" />
                 <span>WiFi</span>
               </div>
             )}
-            {/* Pets Allowed (Only if true) */}
+            {/* Pets Allowed */}
             {venue.meta?.pets && (
               <div className="flex items-center gap-1">
                 <FaPaw className="text-base" />

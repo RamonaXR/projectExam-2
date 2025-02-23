@@ -1,3 +1,5 @@
+import Button from "../Button";
+
 export default function SearchBar({
   searchInput,
   setSearchInput,
@@ -15,12 +17,7 @@ export default function SearchBar({
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && setSearchQuery(searchInput)}
         />
-        <button
-          className="bg-button text-white px-5 py-3 rounded-md text-lg whitespace-nowrap"
-          onClick={() => setSearchQuery(searchInput)}
-        >
-          Search
-        </button>
+        <Button onClick={() => setSearchQuery(searchInput)}>Search</Button>
       </div>
     </div>
   );

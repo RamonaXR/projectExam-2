@@ -1,22 +1,21 @@
 import { useState, useEffect } from "react";
+import { registerSchema } from "../../validation/validationSchemas";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "../../hooks/useRegister";
 import ErrorMessage from "../../components/ErrorMessage";
 
 export default function Register() {
-  const initialFormData = {
-    name: "",
-    email: "",
-    password: "",
-    bio: "",
-    avatarUrl: "",
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
 
-  // Toggle: false = Traveller, true = Venue Manager
   const [isVenueManager, setIsVenueManager] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
-  const navigate = useNavigate();
-
   const {
     mutate: registerUser,
     isLoading,
@@ -24,30 +23,22 @@ export default function Register() {
     error,
     isSuccess,
   } = useRegister();
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const submitRegistration = () => {
+  const onSubmit = (data) => {
     const payload = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      bio: formData.bio,
-      venueManager: isVenueManager, // Set based on toggle
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      bio: data.bio,
+      venueManager: isVenueManager,
       avatar: {
-        url: formData.avatarUrl,
-        alt: `${formData.name} avatar`,
+        url: data.avatarUrl,
+        alt: `${data.name} avatar`,
       },
     };
     console.log("Submitting registration with payload:", payload);
     registerUser(payload);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    submitRegistration();
   };
 
   useEffect(() => {
@@ -60,97 +51,107 @@ export default function Register() {
   }, [isSuccess, navigate]);
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center text-gray-700 mb-6">
-        Register
-      </h1>
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
+      style={{ backgroundImage: 'url("/img/chairview.jpg")' }}
+    >
+      <div className="bg-white bg-opacity-90 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-full max-w-md md:max-w-lg">
+        <h1 className="text-3xl font-bold text-center text-gray-700 mb-6">
+          Register
+        </h1>
 
-      <div className="flex mb-6 border rounded-xl overflow-hidden">
-        <button
-          type="button"
-          onClick={() => setIsVenueManager(false)}
-          className={`w-1/2 py-2 text-center text-xl font-bold transition-colors duration-300 ${
-            !isVenueManager
-              ? "bg-primary text-black hover:bg-primary/90"
-              : "bg-white text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          Traveller
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsVenueManager(true)}
-          className={`w-1/2 py-2 text-center text-xl font-bold transition-colors duration-300 ${
-            isVenueManager
-              ? "bg-primary text-black hover:bg-primary/90"
-              : "bg-white text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          Venue Manager
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 p-3 rounded-md"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email (@stud.noroff.no)"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 p-3 rounded-md"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password (min 8 characters)"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 p-3 rounded-md"
-        />
-        <textarea
-          name="bio"
-          placeholder="Bio (optional)"
-          value={formData.bio}
-          onChange={handleChange}
-          className="w-full border border-gray-300 p-3 rounded-md"
-        />
-        <input
-          type="text"
-          name="avatarUrl"
-          placeholder="Avatar URL (required)"
-          value={formData.avatarUrl}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 p-3 rounded-md"
-        />
-
-        {isError && <ErrorMessage message={error.message} />}
-
-        {isSuccess ? (
-          <div className="text-green-500 text-center">
-            Registration successful! Redirecting to login...
-          </div>
-        ) : (
+        <div className="flex mb-6 border rounded-full overflow-hidden">
           <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-button text-white py-3 rounded-md transition-colors duration-300"
+            type="button"
+            onClick={() => setIsVenueManager(false)}
+            className={`w-1/2 py-2 text-center text-xl font-bold transition-colors duration-300 ${
+              !isVenueManager
+                ? "bg-primary text-black"
+                : "bg-white text-gray-700"
+            }`}
           >
-            {isLoading ? "Registering..." : "Register"}
+            Traveller
           </button>
-        )}
-      </form>
+          <button
+            type="button"
+            onClick={() => setIsVenueManager(true)}
+            className={`w-1/2 py-2 text-center text-xl font-bold transition-colors duration-300 ${
+              isVenueManager
+                ? "bg-primary text-black"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            Venue Manager
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <input
+              type="text"
+              placeholder="Name"
+              {...register("name")}
+              className="w-full border border-gray-300 p-3 rounded-md"
+            />
+            {errors.name && <ErrorMessage message={errors.name.message} />}
+          </div>
+          <div>
+            <input
+              type="email"
+              placeholder="Email (@stud.noroff.no)"
+              {...register("email")}
+              className="w-full border border-gray-300 p-3 rounded-md"
+            />
+            {errors.email && <ErrorMessage message={errors.email.message} />}
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="Password (min 8 characters)"
+              {...register("password")}
+              className="w-full border border-gray-300 p-3 rounded-md"
+            />
+            {errors.password && (
+              <ErrorMessage message={errors.password.message} />
+            )}
+          </div>
+          <div>
+            <textarea
+              placeholder="Bio (optional)"
+              {...register("bio")}
+              className="w-full border border-gray-300 p-3 rounded-md"
+            />
+            {errors.bio && <ErrorMessage message={errors.bio.message} />}
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Avatar URL (required)"
+              {...register("avatarUrl")}
+              className="w-full border border-gray-300 p-3 rounded-md"
+            />
+            {errors.avatarUrl && (
+              <ErrorMessage message={errors.avatarUrl.message} />
+            )}
+          </div>
+
+          {isError && <ErrorMessage message={error.message} />}
+
+          {isSuccess ? (
+            <div className="text-green-500 text-center">
+              Registration successful! Redirecting to login...
+            </div>
+          ) : (
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-button text-white py-3 rounded-md transition-colors duration-300"
+            >
+              {isLoading ? "Registering..." : "Register"}
+            </button>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
