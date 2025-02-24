@@ -1,9 +1,9 @@
-import { useRef, useEffect } from "react";
 import VenueCard from "../VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 import ErrorMessage from "../ErrorMessage";
 import SearchBar from "../SearchBar";
 import SortDropdown from "../SortDropdown";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export default function VenueList() {
   const {
@@ -24,21 +24,7 @@ export default function VenueList() {
     setSearchQuery,
   } = useVenues();
 
-  const observerRef = useRef();
-
-  // Intersection Observer for infinite scrolling
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 },
-    );
-    if (observerRef.current) observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage]);
+  const observerRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
   if (isLoading)
     return <div className="text-center text-lg mt-4">Loading venues...</div>;
@@ -47,14 +33,12 @@ export default function VenueList() {
 
   return (
     <div className="container mx-auto p-6">
-      {/* Search Bar Component */}
       <SearchBar
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         setSearchQuery={setSearchQuery}
       />
 
-      {/* Sort Dropdown */}
       <div className="max-w-3xl mx-auto mb-6 text-right">
         <SortDropdown
           sortBy={sortBy}
@@ -64,7 +48,6 @@ export default function VenueList() {
         />
       </div>
 
-      {/* Venue Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {data.pages
           .flatMap((page) => page.data)
@@ -73,7 +56,6 @@ export default function VenueList() {
           ))}
       </div>
 
-      {/* Infinite Scroll Trigger */}
       <div
         ref={observerRef}
         className="h-12 flex justify-center items-center mt-6"
