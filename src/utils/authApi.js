@@ -5,7 +5,7 @@ export async function loginApi(payload) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      apikey: API_KEY,
+      "X-Noroff-API-Key": API_KEY,
     },
     body: JSON.stringify(payload),
   });
@@ -28,7 +28,7 @@ export async function registerApi(payload) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      apikey: API_KEY,
+      "X-Noroff-API-Key": API_KEY,
     },
     body: JSON.stringify(payload),
   });
