@@ -1,8 +1,6 @@
 import { API_BASE_URL, API_KEY } from "../constants";
 
 export async function loginApi(payload) {
-  console.log("Login payload:", payload);
-
   const response = await fetch(`${API_BASE_URL}/auth/login?_holidaze=true`, {
     method: "POST",
     headers: {
@@ -22,13 +20,10 @@ export async function loginApi(payload) {
     );
   }
 
-  console.log("Login response:", data);
   return data;
 }
 
 export async function registerApi(payload) {
-  console.log("Registering user with payload:", payload);
-
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     headers: {
@@ -48,6 +43,5 @@ export async function registerApi(payload) {
     );
   }
 
-  console.log("Registration successful. Response data:", data);
   return data;
 }
