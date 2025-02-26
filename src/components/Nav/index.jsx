@@ -11,7 +11,7 @@ export default function Nav() {
       {isLoggedIn && isVenueManager ? (
         <>
           <NavLink
-            to="/profile"
+            to="/venue/add"
             className={({ isActive }) =>
               isActive ? "font-bold text-gray-900" : "font-bold text-gray-700"
             }
