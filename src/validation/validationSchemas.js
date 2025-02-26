@@ -28,20 +28,41 @@ export const registerSchema = yup.object().shape({
   bio: yup.string().max(160, "Bio must be 160 characters or less"),
 });
 
+export const singleUrlSchema = yup.object().shape({
+  url: yup
+    .string()
+    .required("URL is required")
+    .url("Must be a valid image URL"),
+});
+
 export const venueSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
-  mediaUrl: yup.string().url("Must be a valid URL").nullable(),
+  mediaUrls: yup
+    .array()
+    .of(
+      yup.object().shape({
+        url: yup
+          .string()
+          .trim()
+          .required("Image URL is required")
+          .url("Must be a valid URL"),
+      }),
+    )
+    .min(1, "At least one image URL is required")
+    .max(8, "You can add at most 8 images"),
   price: yup
     .number()
     .typeError("Price must be a number")
     .required("Price is required")
-    .min(0, "Price cannot be negative"),
+    .min(0, "Price cannot be negative")
+    .max(10000, "Price cannot exceed 10,000"),
   maxGuests: yup
     .number()
     .typeError("Max guests must be a number")
     .required("Max guests is required")
-    .min(1, "At least 1 guest is required"),
+    .min(1, "At least 1 guest is required")
+    .max(100, "Max guests cannot exceed 100"),
   rating: yup
     .number()
     .typeError("Rating must be a number")
