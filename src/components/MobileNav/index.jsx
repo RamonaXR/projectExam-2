@@ -78,7 +78,7 @@ export default function MobileNav({ toggleMenu }) {
               <>
                 <NavLink
                   onClick={toggleMenu}
-                  to="/profile"
+                  to="/venue/add"
                   className={navLinkStyle}
                 >
                   Add new venue
