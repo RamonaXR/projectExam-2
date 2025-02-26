@@ -51,7 +51,7 @@ export default function Login() {
           Not already a member?{" "}
           <Link
             to="/register"
-            className="font-bold text-blue-600 hover:underline"
+            className="font-bold text-button hover:underline"
           >
             Register here
           </Link>
