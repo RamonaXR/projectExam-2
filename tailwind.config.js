@@ -6,7 +6,7 @@ export default {
       colors: {
         primary: "#B7E2C4", // Soft green
         secondary: "#F6BE6F", // Warm orange
-        button: "#F67878", // Button color
+        button: "#CF0C54", // Button color
       },
       fontFamily: {
         sans: ["Lunasima", "sans-serif"],

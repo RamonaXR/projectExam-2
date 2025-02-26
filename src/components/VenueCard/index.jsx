@@ -10,7 +10,7 @@ export default function VenueCard({ venue }) {
 
   return (
     <Link to={`/venue/${venue.id}`}>
-      <div className="border border-secondary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300">
+      <div className="border border-primary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300">
         {/* Venue Image */}
         <SafeImage
           src={imageUrl}

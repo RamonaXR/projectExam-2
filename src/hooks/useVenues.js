@@ -1,19 +1,9 @@
 import { useState, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import { fetchFn } from "../utils/fetchUtils";
+import { updateSearchParams } from "../utils/queryUtils";
 import { API_BASE_URL } from "../constants";
-
-const fetchFn = async (url) => {
-  const response = await fetch(url);
-  const data = await response.json();
-  if (!response.ok) {
-    const errorMessage =
-      data.errors?.map((err) => err.message).join(", ") ||
-      `Server Error (Status: ${response.status})`;
-    throw new Error(errorMessage);
-  }
-  return data;
-};
 
 export function useVenues() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,11 +15,7 @@ export function useVenues() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
 
   useEffect(() => {
-    const params = {};
-    if (sortBy) params.sort = sortBy;
-    if (sortOrder) params.sortOrder = sortOrder;
-    if (searchQuery) params.q = searchQuery;
-    setSearchParams(params);
+    updateSearchParams(setSearchParams, sortBy, sortOrder, searchQuery);
   }, [sortBy, sortOrder, searchQuery, setSearchParams]);
 
   const getEndpoint = (pageParam = 1) => {
@@ -37,7 +23,6 @@ export function useVenues() {
     const queryParams = new URLSearchParams({
       ...(searchQuery && { q: searchQuery }),
       sort: sortBy,
-
       sortOrder: sortOrder,
       _owner: "true",
       limit: "10",

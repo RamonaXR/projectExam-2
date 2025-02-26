@@ -13,7 +13,7 @@ export default function MobileNav({ toggleMenu }) {
 
   return (
     <div
-      className="md:hidden fixed inset-0 z-50 flex flex-col items-center justify-center p-8 backdrop-blur-lg"
+      className="md:hidden bg-black fixed inset-0 z-50 flex flex-col items-center justify-center p-8 backdrop-blur-lg"
       style={{
         backgroundImage: 'url("/img/waves.jpg")',
         backgroundSize: "cover",

@@ -5,7 +5,6 @@ import Button from "../../components/Button";
 export default function Home() {
   return (
     <div className="space-y-10">
-      {/* Hero Section */}
       <section className="relative">
         <img
           src="/img/holidazehero2.jpg"
