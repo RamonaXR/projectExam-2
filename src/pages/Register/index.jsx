@@ -27,7 +27,6 @@ export default function Register() {
       },
     };
 
-    console.log("Submitting registration with payload:", payload);
     registerUser(payload);
   };
 
