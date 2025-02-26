@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import LoginForm from "../../components/LoginForm";
 import { useAuthStore } from "../../store/authStore";
@@ -14,6 +14,9 @@ export default function Login() {
   } = useLogin();
   const { setLogin } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
 
   const onSubmit = (data) => {
     loginUser(data, {
@@ -25,9 +28,9 @@ export default function Login() {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/");
+      navigate(redirect, { replace: true });
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess, navigate, redirect]);
 
   return (
     <div
