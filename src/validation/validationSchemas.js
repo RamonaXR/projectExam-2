@@ -65,7 +65,7 @@ export const venueSchema = yup.object().shape({
     .max(100, "Max guests cannot exceed 100"),
   rating: yup
     .number()
-    .typeError("Rating must be a number")
+    .typeError("Please select a rating")
     .min(0, "Rating must be at least 0")
     .max(5, "Rating cannot exceed 5")
     .nullable(),
