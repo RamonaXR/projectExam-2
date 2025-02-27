@@ -49,7 +49,6 @@ export const venueSchema = yup.object().shape({
           .url("Must be a valid URL"),
       }),
     )
-    .min(1, "At least one image URL is required")
     .max(8, "You can add at most 8 images"),
   price: yup
     .number()
