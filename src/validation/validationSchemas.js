@@ -49,7 +49,7 @@ export const venueSchema = yup.object().shape({
           .url("Must be a valid URL"),
       }),
     )
-    .max(8, "You can only 8 images"),
+    .max(8, "You can only add 8 images"),
   price: yup
     .number()
     .typeError("Price must be a number")
