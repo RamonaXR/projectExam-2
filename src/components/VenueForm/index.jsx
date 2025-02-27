@@ -38,31 +38,38 @@ export default function VenueForm({
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [tempImageError, setTempImageError] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
-
   const currentRating = watch("rating") || 0;
 
-  const handleAddImage = async () => {
+  async function handleAddImage() {
+    const trimmedUrl = tempImageUrl.trim();
+    if (!trimmedUrl) {
+      setTempImageError("");
+      return;
+    }
     try {
-      await singleUrlSchema.validate({ url: tempImageUrl });
+      await singleUrlSchema.validate({ url: trimmedUrl });
       if (fields.length >= 8) {
         setTempImageError("You can add at most 8 images");
         return;
       }
-      append({ url: tempImageUrl });
+      append({ url: trimmedUrl });
       setTempImageUrl("");
       setTempImageError("");
-    } catch (err) {
-      setTempImageError(err.message);
+    } catch (error) {
+      setTempImageError(error.message);
     }
-  };
+  }
+
+  async function handleImageBlur() {
+    if (tempImageUrl.trim() !== "") {
+      await handleAddImage();
+    }
+  }
 
   const handleFormSubmit = (data) => {
     if (tempImageUrl.trim() !== "") {
-      console.log(
-        "Image url is empty); // Console log her å se om den kommer i console på empty submission",
-      );
       setTempImageError(
-        "Please click 'Add' to append the image URL before submitting.",
+        "Please leave the image URL field (or clear it) before submitting.",
       );
       return;
     }
@@ -94,12 +101,13 @@ export default function VenueForm({
         </div>
 
         <div>
-          <label className="block font-bold mb-1">Add Image</label>
+          <label className="block font-bold mb-1">Add Image (Optional)</label>
           <div className="flex items-center space-x-2 mb-2">
             <input
               type="text"
               value={tempImageUrl}
               onChange={(e) => setTempImageUrl(e.target.value)}
+              onBlur={handleImageBlur}
               placeholder="https://example.com/image.jpg"
               className="w-full border border-gray-300 p-2 rounded text-xs sm:text-base"
             />
@@ -107,12 +115,13 @@ export default function VenueForm({
               Add
             </Button>
           </div>
+          {tempImageError && <ErrorMessage message={tempImageError} />}
         </div>
 
         <div>
           <label className="block font-bold mb-1">Images</label>
           {fields.length === 0 && (
-            <p className="text-gray-600 text-sm mb-2">No images added yet.</p>
+            <p className="text-gray-600 text-sm mb-2">No images added.</p>
           )}
           {fields.map((field, index) => (
             <div key={field.id} className="flex flex-col sm:flex-row mb-4">
@@ -139,17 +148,13 @@ export default function VenueForm({
                   <AiOutlineClose size={20} />
                 </button>
               </div>
+              {errors.mediaUrls &&
+                errors.mediaUrls[index] &&
+                errors.mediaUrls[index].url && (
+                  <ErrorMessage message={errors.mediaUrls[index].url.message} />
+                )}
             </div>
           ))}
-          {errors.mediaUrls && (
-            <ErrorMessage
-              message={
-                Array.isArray(errors.mediaUrls)
-                  ? errors.mediaUrls.map((err) => err?.url?.message).join(", ")
-                  : errors.mediaUrls.message
-              }
-            />
-          )}
         </div>
 
         <div>
@@ -226,8 +231,6 @@ export default function VenueForm({
           </div>
         </div>
 
-        {tempImageError && <ErrorMessage message={tempImageError} />}
-
         <div className="flex justify-center">
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "Saving..." : buttonText}
@@ -236,11 +239,7 @@ export default function VenueForm({
       </form>
 
       {previewUrl && (
-        <Modal
-          isOpen={!!previewUrl}
-          onClose={() => setPreviewUrl(null)}
-          title="Image Preview"
-        >
+        <Modal isOpen={!!previewUrl} onClose={() => setPreviewUrl(null)}>
           <SafeImage
             src={previewUrl}
             alt="Large Preview"
