@@ -1,12 +1,16 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useVenue } from "../../hooks/useVenue";
 import VenueForm from "../../components/VenueForm";
 import { useEditVenue } from "../../hooks/useEditVenue";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useAuthStore } from "../../store/authStore";
+import { toast } from "react-toastify";
 
 export default function EditVenue() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
   const { data: venue, isLoading, isError, error } = useVenue(id);
   const {
     mutate: editVenue,
@@ -14,16 +18,21 @@ export default function EditVenue() {
     error: updateError,
   } = useEditVenue();
 
-  if (isLoading)
+  if (!isLoggedIn) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (isLoading) {
     return <div className="text-center">Loading venue details...</div>;
-  if (isError) return <ErrorMessage message={error.message} />;
+  }
+  if (isError) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   const initialValues = {
     name: venue.name || "",
     description: venue.description || "",
-    mediaUrls: venue.media
-      ? venue.media.map((img) => ({ url: img.url }))
-      : [""],
+    mediaUrls: venue.media ? venue.media.map((img) => ({ url: img.url })) : [],
     price: venue.price || "",
     maxGuests: venue.maxGuests || "",
     rating: venue.rating || "",
@@ -40,6 +49,10 @@ export default function EditVenue() {
       { venueId: id, ...data },
       {
         onSuccess: () => {
+          toast.success("Venue created successfully!", {
+            position: "top-center",
+            autoClose: 3000,
+          });
           navigate("/profile");
         },
       },
