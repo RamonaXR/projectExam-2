@@ -38,7 +38,7 @@ export default function ImageInput({ append, fields }) {
           onChange={(e) => setTempImageUrl(e.target.value)}
           onBlur={handleImageBlur}
           placeholder="https://example.com/image.jpg"
-          className="w-full border border-gray-300 p-2 rounded text-xs sm:text-base"
+          className="w-full border border-gray-400 p-2 rounded text-xs sm:text-base"
         />
         <Button type="button" onClick={handleAddImage}>
           Add
