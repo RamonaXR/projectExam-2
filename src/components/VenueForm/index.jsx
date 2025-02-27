@@ -37,7 +37,6 @@ export default function VenueForm({
 
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [tempImageError, setTempImageError] = useState("");
-
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const currentRating = watch("rating") || 0;
@@ -58,6 +57,15 @@ export default function VenueForm({
   };
 
   const handleFormSubmit = (data) => {
+    if (tempImageUrl.trim() !== "") {
+      console.log(
+        "Image url is empty); // Console log her å se om den kommer i console på empty submission",
+      );
+      setTempImageError(
+        "Please click 'Add' to append the image URL before submitting.",
+      );
+      return;
+    }
     onSubmit(data);
   };
 
@@ -99,7 +107,6 @@ export default function VenueForm({
               Add
             </Button>
           </div>
-          {tempImageError && <ErrorMessage message={tempImageError} />}
         </div>
 
         <div>
@@ -120,7 +127,7 @@ export default function VenueForm({
                 <input
                   type="text"
                   {...register(`mediaUrls.${index}.url`)}
-                  className="border border-gray-300 p-2 rounded w-full whitespace-normal break-all text-xs sm:text-base"
+                  className="w-full border border-gray-300 p-2 rounded whitespace-normal break-all text-xs sm:text-base"
                   readOnly
                   title={field.url}
                 />
@@ -219,6 +226,8 @@ export default function VenueForm({
           </div>
         </div>
 
+        {tempImageError && <ErrorMessage message={tempImageError} />}
+
         <div className="flex justify-center">
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "Saving..." : buttonText}
@@ -227,7 +236,11 @@ export default function VenueForm({
       </form>
 
       {previewUrl && (
-        <Modal isOpen={!!previewUrl} onClose={() => setPreviewUrl(null)}>
+        <Modal
+          isOpen={!!previewUrl}
+          onClose={() => setPreviewUrl(null)}
+          title="Image Preview"
+        >
           <SafeImage
             src={previewUrl}
             alt="Large Preview"

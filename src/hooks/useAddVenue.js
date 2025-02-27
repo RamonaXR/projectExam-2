@@ -13,7 +13,10 @@ export function useAddVenue() {
         description: venueData.description,
         media:
           venueData.mediaUrls && venueData.mediaUrls.length > 0
-            ? venueData.mediaUrls.map((url) => ({ url, alt: "Venue image" }))
+            ? venueData.mediaUrls.map((item) => ({
+                url: item.url,
+                alt: "Venue image",
+              }))
             : [],
         price: Number(venueData.price),
         maxGuests: Number(venueData.maxGuests),
@@ -35,14 +38,18 @@ export function useAddVenue() {
         },
         body: JSON.stringify(payload),
       });
+
       const data = await response.json();
+
       if (!response.ok) {
+        console.log("API Error Response:", data);
         throw new Error(
           data.errors
             ? data.errors.map((err) => err.message).join(", ")
             : "Venue creation failed",
         );
       }
+
       return data;
     },
     onSuccess: () => {
