@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useProfile } from "../../hooks/useProfile";
 import { useAuthStore } from "../../store/authStore";
 import EditProfileModal from "../../components/EditProfileModal";
@@ -11,32 +11,35 @@ import SafeImage from "../../components/SafeImage";
 
 export default function Profile() {
   const { userProfile } = useAuthStore();
-  const navigate = useNavigate();
+
+  const name = userProfile?.name || "";
   const {
     data: profile,
     isLoading,
     isError,
     error,
-    refetch,
-  } = useProfile(userProfile?.name, { _bookings: true, _venues: true });
+  } = useProfile(name, { _bookings: true, _venues: true });
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // Redirect to login if not logged in
-  useEffect(() => {
-    if (!userProfile) {
-      navigate("/login");
-    }
-  }, [userProfile, navigate]);
+  if (!userProfile) {
+    return <Navigate to="/login" replace />;
+  }
 
   if (isLoading) return <div className="text-center">Loading profile...</div>;
-  if (isError) return <ErrorMessage message={error.message} />;
+
+  if (isError || !profile) {
+    return (
+      <ErrorMessage message={error ? error.message : "Profile not found"} />
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
       <div className="flex flex-col items-center border border-gray-300 rounded p-4 shadow-md mb-8">
         <SafeImage
-          src={profile.avatar.url}
-          alt={profile.avatar.alt || "User avatar"}
+          src={profile.avatar?.url}
+          alt={profile.avatar?.alt || "User avatar"}
           fallback="/img/placeholderavatar.jpg"
           className="w-24 h-24 rounded-full object-cover"
         />
@@ -66,10 +69,7 @@ export default function Profile() {
       {isEditModalOpen && (
         <EditProfileModal
           isOpen={isEditModalOpen}
-          onClose={() => {
-            setIsEditModalOpen(false);
-            refetch();
-          }}
+          onClose={() => setIsEditModalOpen(false)}
           profile={profile}
         />
       )}
