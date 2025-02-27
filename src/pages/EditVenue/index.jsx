@@ -35,7 +35,7 @@ export default function EditVenue() {
     mediaUrls: venue.media ? venue.media.map((img) => ({ url: img.url })) : [],
     price: venue.price || "",
     maxGuests: venue.maxGuests || "",
-    rating: venue.rating || "",
+    rating: venue.rating || 0,
     meta: {
       wifi: venue.meta?.wifi || false,
       parking: venue.meta?.parking || false,
@@ -49,7 +49,7 @@ export default function EditVenue() {
       { venueId: id, ...data },
       {
         onSuccess: () => {
-          toast.success("Venue created successfully!", {
+          toast.success("Venue updated successfully!", {
             position: "top-center",
             autoClose: 3500,
           });
