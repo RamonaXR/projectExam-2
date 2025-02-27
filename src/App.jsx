@@ -8,10 +8,13 @@ import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import AddVenue from "./pages/AddVenue";
 import EditVenue from "./pages/EditVenue";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
     <div>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

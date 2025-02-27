@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function Modal({ isOpen, onClose, title, children }) {
   return (
@@ -28,7 +29,15 @@ export default function Modal({ isOpen, onClose, title, children }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="relative w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                {/* Close button in the top-right */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                >
+                  <AiOutlineClose size={20} />
+                </button>
+
                 {title && (
                   <Dialog.Title
                     as="h3"
@@ -39,16 +48,6 @@ export default function Modal({ isOpen, onClose, title, children }) {
                 )}
 
                 <div className="mt-2">{children}</div>
-
-                <div className="mt-4 flex justify-end">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200"
-                    onClick={onClose}
-                  >
-                    OK
-                  </button>
-                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

@@ -1,6 +1,6 @@
 import { FaStar } from "react-icons/fa";
 
-export default function StarRating({ rating = 0 }) {
+export default function StarRating({ rating = 0, setRating = null }) {
   const filledStars = Math.max(0, Math.min(5, Math.round(rating)));
 
   return (
@@ -8,9 +8,10 @@ export default function StarRating({ rating = 0 }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <FaStar
           key={i}
-          className={`text-xl ${
+          className={`cursor-pointer text-xl ${
             i < filledStars ? "text-yellow-400" : "text-gray-300"
           }`}
+          onClick={setRating ? () => setRating(i + 1) : undefined}
         />
       ))}
       {rating > 0 ? (
