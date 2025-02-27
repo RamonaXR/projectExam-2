@@ -1,16 +1,24 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import VenueForm from "../../components/VenueForm";
 import { useAddVenue } from "../../hooks/useAddVenue";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useAuthStore } from "../../store/authStore";
+import { toast } from "react-toastify";
 
 export default function AddVenue() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
   const { mutate: addVenue, isLoading, error } = useAddVenue();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" replace />;
+  }
 
   const initialValues = {
     name: "",
     description: "",
-    mediaUrls: [""],
+    mediaUrls: [],
     price: "",
     maxGuests: "",
     rating: "",
@@ -25,6 +33,10 @@ export default function AddVenue() {
   const onSubmit = (data) => {
     addVenue(data, {
       onSuccess: () => {
+        toast.success("Venue created successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
         navigate("/profile");
       },
     });
