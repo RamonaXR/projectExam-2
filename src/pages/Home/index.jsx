@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import VenueList from "../../components/VenueList";
 import Button from "../../components/Button";
+import { useAuthStore } from "../../store/authStore";
 
 export default function Home() {
+  const { isLoggedIn } = useAuthStore();
+
   return (
     <div className="space-y-10">
       <section className="relative">
@@ -15,13 +18,15 @@ export default function Home() {
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Book your next holidaze!
           </h1>
-          <Button
-            as={Link}
-            to="/register"
-            className="px-8 py-3 text-lg hover:bg-gray-500 transition-colors"
-          >
-            Register
-          </Button>
+          {!isLoggedIn && (
+            <Button
+              as={Link}
+              to="/register"
+              className="px-8 py-3 text-lg hover:bg-gray-500 transition-colors"
+            >
+              Register
+            </Button>
+          )}
         </div>
       </section>
       <section>
