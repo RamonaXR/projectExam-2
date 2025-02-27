@@ -21,7 +21,7 @@ export default function AddVenue() {
     mediaUrls: [],
     price: "",
     maxGuests: "",
-    rating: "",
+    rating: 0,
     meta: {
       wifi: false,
       parking: false,

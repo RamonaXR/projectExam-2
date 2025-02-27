@@ -51,7 +51,7 @@ export default function EditVenue() {
         onSuccess: () => {
           toast.success("Venue created successfully!", {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 3500,
           });
           navigate("/profile");
         },
