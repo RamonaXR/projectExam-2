@@ -3,6 +3,7 @@ import Button from "../Button";
 import ErrorMessage from "../ErrorMessage";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
 import Modal from "../Modal";
+import { useAuthStore } from "../../store/authStore";
 
 export default function EditProfileModal({ isOpen, onClose, profile }) {
   const {
@@ -17,6 +18,7 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
   });
 
   const { mutate: updateProfile, isLoading, error } = useUpdateProfile();
+  const { setLogin } = useAuthStore();
 
   const onSubmit = (data) => {
     updateProfile(
@@ -26,7 +28,8 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
         avatar: { url: data.avatarUrl, alt: "User avatar" },
       },
       {
-        onSuccess: () => {
+        onSuccess: (updatedProfile) => {
+          setLogin(updatedProfile);
           onClose();
         },
       },
