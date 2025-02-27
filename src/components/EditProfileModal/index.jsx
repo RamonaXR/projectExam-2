@@ -29,7 +29,11 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
       },
       {
         onSuccess: (updatedProfile) => {
-          setLogin(updatedProfile);
+          const currentProfile = useAuthStore.getState().userProfile;
+          setLogin({
+            ...updatedProfile,
+            accessToken: currentProfile?.accessToken || "",
+          });
           onClose();
         },
       },
