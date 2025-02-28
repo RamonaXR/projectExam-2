@@ -8,6 +8,7 @@ export default {
         secondary: "#F6BE6F", // Warm orange
         button: "#CF0C54", // Button color
       },
+
       fontFamily: {
         sans: ["Lunasima", "sans-serif"],
       },
