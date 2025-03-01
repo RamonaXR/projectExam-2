@@ -3,7 +3,7 @@ import { validateAndAddImage } from "../../utils/imageUtils";
 import Button from "../Button";
 import ErrorMessage from "../ErrorMessage";
 
-export default function ImageInput({ append, fields }) {
+export default function ImageInput({ id, append, fields }) {
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [tempImageError, setTempImageError] = useState("");
 
@@ -30,9 +30,9 @@ export default function ImageInput({ append, fields }) {
 
   return (
     <div>
-      <label className="block font-bold mb-1">Add Image (Optional)</label>
-      <div className="flex items-center space-x-2 mb-2">
+      <div className="flex items-center space-x-2 mb-8">
         <input
+          id={id}
           type="text"
           value={tempImageUrl}
           onChange={(e) => setTempImageUrl(e.target.value)}
