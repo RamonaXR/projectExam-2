@@ -1,3 +1,175 @@
+import { useState } from "react";
+import { Navigate, Link } from "react-router-dom";
+import { useProfile } from "../../hooks/useProfile";
+import { useAuthStore } from "../../store/authStore";
+import EditProfileModal from "../../components/EditProfileModal";
+import BookingsList from "../../components/BookingList";
+import VenuesList from "../../components/VenuesList";
+import { useManagerVenues } from "../../hooks/useManagerVenues";
+import Button from "../../components/Button";
+import ErrorMessage from "../../components/ErrorMessage";
+import SafeImage from "../../components/SafeImage";
+
 export default function Profile() {
-  return <h1>Profile</h1>;
+  const { userProfile } = useAuthStore();
+  const name = userProfile?.name || "";
+
+  const {
+    data: profile,
+    isLoading,
+    isError,
+    error,
+  } = useProfile(name, {
+    _bookings: true,
+    _venues: true,
+  });
+
+  const {
+    data: managerVenues,
+    isLoading: isLoadingManagerVenues,
+    isError: isErrorManagerVenues,
+    error: errorManagerVenues,
+  } = useManagerVenues(name);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  if (!userProfile) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (isLoading) return <div className="text-center">Loading profile...</div>;
+  if (isError || !profile) {
+    return (
+      <ErrorMessage message={error ? error.message : "Profile not found"} />
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4 space-y-8">
+      <div className="flex flex-col items-center border border-gray-300 rounded p-4 shadow-md">
+        <SafeImage
+          src={profile.avatar?.url}
+          alt={profile.avatar?.alt || "User avatar"}
+          fallback="/img/placeholderavatar.jpg"
+          className="w-24 h-24 rounded-full object-cover"
+        />
+        <h1 className="text-3xl font-bold mt-4 break-all text-center">
+          {profile.name}
+        </h1>
+        <div className="flex justify-center mt-2">
+          {profile.venueManager ? (
+            <span className="bg-green-200 text-green-800 px-2 py-1 rounded-full text-xs">
+              Venue Manager
+            </span>
+          ) : (
+            <span className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-xs">
+              Traveller
+            </span>
+          )}
+        </div>
+        <p className="text-gray-700 mt-2">{profile.bio}</p>
+        <Button
+          type="button"
+          onClick={() => setIsEditModalOpen(true)}
+          className="mt-4"
+        >
+          Edit Profile
+        </Button>
+      </div>
+
+      {!profile.venueManager ? (
+        <>
+          <h2 className="text-2xl font-bold">My Bookings</h2>
+          <BookingsList bookings={profile.bookings} />
+        </>
+      ) : (
+        <>
+          <h2 className="text-2xl font-bold">My Venues</h2>
+          <VenuesList venues={profile.venues} />
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Bookings on Your Venues</h2>
+            {isLoadingManagerVenues && (
+              <div className="text-center">Loading venue bookings...</div>
+            )}
+            {isErrorManagerVenues && (
+              <ErrorMessage
+                message={
+                  errorManagerVenues
+                    ? errorManagerVenues.message
+                    : "Error fetching venue bookings"
+                }
+              />
+            )}
+            {!isLoadingManagerVenues &&
+              !isErrorManagerVenues &&
+              managerVenues && (
+                <>
+                  {managerVenues.every((venue) => {
+                    const upcoming =
+                      venue.bookings &&
+                      venue.bookings.filter(
+                        (b) => new Date(b.dateFrom) >= new Date(),
+                      );
+                    return !upcoming || upcoming.length === 0;
+                  }) ? (
+                    <p className="text-gray-600">No upcoming bookings.</p>
+                  ) : (
+                    managerVenues.map((venue) => {
+                      const upcoming =
+                        venue.bookings &&
+                        venue.bookings.filter(
+                          (b) => new Date(b.dateFrom) >= new Date(),
+                        );
+                      if (!upcoming || upcoming.length === 0) return null;
+                      return (
+                        <div key={venue.id} className="mb-4 space-y-4">
+                          {upcoming.map((booking) => (
+                            <div
+                              key={booking.id}
+                              className="border p-4 rounded shadow flex flex-col md:flex-row md:items-center justify-between"
+                            >
+                              <div className="flex items-center space-x-4">
+                                <Link to={`/venue/${venue.id}`}>
+                                  <SafeImage
+                                    src={venue.media && venue.media[0]?.url}
+                                    fallback="/img/placeholdervenue-3.jpg"
+                                    alt={venue.name}
+                                    className="w-24 h-24 object-cover rounded"
+                                  />
+                                </Link>
+                                <div>
+                                  <p className="font-bold">{venue.name}</p>
+                                  <p>
+                                    {new Date(
+                                      booking.dateFrom,
+                                    ).toLocaleDateString()}{" "}
+                                    -{" "}
+                                    {new Date(
+                                      booking.dateTo,
+                                    ).toLocaleDateString()}
+                                  </p>
+                                  <p>Guests: {booking.guests}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })
+                  )}
+                </>
+              )}
+          </div>
+        </>
+      )}
+
+      {isEditModalOpen && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          profile={profile}
+        />
+      )}
+    </div>
+  );
 }

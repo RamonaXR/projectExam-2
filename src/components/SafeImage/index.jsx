@@ -1,4 +1,6 @@
 export default function SafeImage({ src, alt, fallback, className, ...props }) {
+  const imageSrc = src || fallback;
+
   const handleError = (e) => {
     e.target.onerror = null;
     e.target.src = fallback;
@@ -6,7 +8,7 @@ export default function SafeImage({ src, alt, fallback, className, ...props }) {
 
   return (
     <img
-      src={src}
+      src={imageSrc}
       alt={alt}
       onError={handleError}
       className={className}

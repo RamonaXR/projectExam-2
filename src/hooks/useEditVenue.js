@@ -8,6 +8,7 @@ export function useEditVenue() {
     mutationFn: editVenue,
     onSuccess: (_, { venueId }) => {
       queryClient.invalidateQueries({ queryKey: ["venue", venueId] });
+      queryClient.invalidateQueries({ queryKey: ["venues"] });
     },
   });
 }

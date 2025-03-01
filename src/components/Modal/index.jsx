@@ -30,7 +30,6 @@ export default function Modal({ isOpen, onClose, title, children }) {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="relative w-full max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                {/* Close button in the top-right */}
                 <button
                   onClick={onClose}
                   className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

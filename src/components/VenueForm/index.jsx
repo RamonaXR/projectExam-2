@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { venueSchema } from "../../validation/validationSchemas";
 import SafeImage from "../SafeImage";
 import Button from "../Button";
 import ErrorMessage from "../ErrorMessage";
-import { AiOutlineClose } from "react-icons/ai";
 import Modal from "../Modal";
 import AmenitiesCheckboxes from "../AmenitiesCheckboxes";
 import StarRating from "../StarRating";
 import ImageInput from "../ImageInput";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function VenueForm({
   initialValues,
@@ -19,10 +19,8 @@ export default function VenueForm({
 }) {
   const {
     register,
-    control,
     handleSubmit,
-    setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: initialValues,
@@ -34,108 +32,155 @@ export default function VenueForm({
     name: "mediaUrls",
   });
 
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+
+  const openPreview = (imageUrl) => {
+    setPreviewImage(imageUrl);
+    setIsPreviewModalOpen(true);
+  };
+
+  const closePreview = () => {
+    setIsPreviewModalOpen(false);
+    setPreviewImage(null);
+  };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label className="block font-bold mb-1">Name</label>
-          <input
-            type="text"
-            {...register("name")}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.name && <ErrorMessage message={errors.name.message} />}
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label htmlFor="venue-name" className="block font-bold">
+          Name
+        </label>
+        <input
+          id="venue-name"
+          type="text"
+          placeholder="Enter venue name"
+          {...register("name")}
+          className="w-full border border-gray-300 p-2 rounded"
+        />
+        {errors.name && <ErrorMessage message={errors.name.message} />}
+      </div>
 
-        <div>
-          <label className="block font-bold mb-1">Description</label>
-          <textarea
-            {...register("description")}
-            className="w-full border border-gray-300 p-2 rounded"
-          ></textarea>
-          {errors.description && (
-            <ErrorMessage message={errors.description.message} />
-          )}
-        </div>
+      <div>
+        <label htmlFor="venue-description" className="block font-bold">
+          Description
+        </label>
+        <textarea
+          id="venue-description"
+          placeholder="Enter venue description"
+          {...register("description")}
+          className="w-full border border-gray-300 p-2 rounded"
+        ></textarea>
+        {errors.description && (
+          <ErrorMessage message={errors.description.message} />
+        )}
+      </div>
 
-        <ImageInput append={append} fields={fields} />
+      <div>
+        <label htmlFor="image-input" className="block font-bold">
+          Add Images (Optional)
+        </label>
+        <ImageInput id="image-input" append={append} fields={fields} />
+        {errors.mediaUrls && (
+          <ErrorMessage message={errors.mediaUrls.message} />
+        )}
+      </div>
 
-        <div>
-          <label className="block font-bold mb-1">Images</label>
-          {fields.length === 0 && (
-            <p className="text-gray-600 text-sm mb-2">No images added.</p>
-          )}
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-col sm:flex-row mb-4">
-              <SafeImage
-                src={field.url}
-                alt="Image Preview"
-                fallback="/img/placeholdervenue-3.jpg"
-                className="w-24 h-24 object-cover rounded border cursor-pointer"
-                onClick={() => setPreviewUrl(field.url)}
+      <div className="space-y-4">
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="relative p-2 border border-primary rounded shadow"
+          >
+            <SafeImage
+              src={field.url}
+              alt={`Image ${index + 1}`}
+              fallback="/img/placeholdervenue-3.jpg"
+              className="w-24 h-24 object-cover rounded cursor-pointer"
+              onClick={() => openPreview(field.url)}
+            />
+            <button
+              type="button"
+              onClick={() => remove(index)}
+              className="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2"
+            >
+              <AiOutlineClose
+                size={24}
+                className="text-red-600 bg-white rounded-full p-1"
               />
-              <div className="mt-2 sm:mt-0 sm:ml-4 flex items-center w-full space-x-2">
-                <input
-                  type="text"
-                  {...register(`mediaUrls.${index}.url`)}
-                  className="w-full border border-gray-300 p-2 rounded"
-                  readOnly
-                />
-                <button
-                  type="button"
-                  onClick={() => remove(index)}
-                  className="text-red-500"
-                >
-                  <AiOutlineClose size={20} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div>
-          <label className="block font-bold mb-1">Price per night</label>
-          <input
-            type="number"
-            {...register("price")}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.price && <ErrorMessage message={errors.price.message} />}
-        </div>
+            </button>
+          </div>
+        ))}
+      </div>
 
-        <div>
-          <label className="block font-bold mb-1">Max Guests</label>
-          <input
-            type="number"
-            {...register("maxGuests")}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
-          {errors.maxGuests && (
-            <ErrorMessage message={errors.maxGuests.message} />
+      <div>
+        <label htmlFor="venue-price" className="block font-bold">
+          Price/ Night
+        </label>
+        <input
+          id="venue-price"
+          type="number"
+          placeholder="Enter price per night"
+          {...register("price")}
+          className="w-full border border-gray-300 p-2 rounded"
+        />
+        {errors.price && <ErrorMessage message={errors.price.message} />}
+      </div>
+
+      <div>
+        <label htmlFor="venue-maxGuests" className="block font-bold">
+          Max Guests
+        </label>
+        <input
+          id="venue-maxGuests"
+          type="number"
+          placeholder="Enter maximum guests"
+          {...register("maxGuests")}
+          className="w-full border border-gray-300 p-2 rounded"
+        />
+        {errors.maxGuests && (
+          <ErrorMessage message={errors.maxGuests.message} />
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="venue-rating" className="block font-bold mb-1">
+          Rating
+        </label>
+        <Controller
+          control={control}
+          name="rating"
+          render={({ field: { value, onChange } }) => (
+            <StarRating
+              id="venue-rating"
+              rating={value || 0}
+              setRating={onChange}
+            />
           )}
-        </div>
+        />
+        {errors.rating && <ErrorMessage message={errors.rating.message} />}
+      </div>
 
-        <StarRating register={register} setValue={setValue} watch={watch} />
-
+      <div>
         <AmenitiesCheckboxes register={register} />
+      </div>
 
-        <div className="flex justify-center">
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : buttonText}
-          </Button>
-        </div>
-      </form>
+      <div className="text-center">
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Submitting..." : buttonText}
+        </Button>
+      </div>
 
-      {previewUrl && (
-        <Modal isOpen={!!previewUrl} onClose={() => setPreviewUrl(null)}>
+      <Modal isOpen={isPreviewModalOpen} onClose={closePreview}>
+        {previewImage && (
           <SafeImage
-            src={previewUrl}
-            alt="Large Preview"
-            className="w-full h-auto object-contain"
+            src={previewImage}
+            alt="Preview"
+            fallback="/img/placeholdervenue-3.jpg"
+            className="w-full h-auto"
           />
-        </Modal>
-      )}
-    </>
+        )}
+      </Modal>
+    </form>
   );
 }

@@ -196,10 +196,13 @@ export default function BookingForm({ venue, refetchProfile }) {
       <Modal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        title="Booking Confirmed!"
+        title={
+          <span className="font-extrabold text-1xl">Booking Confirmed!</span>
+        }
       >
         <p className="text-gray-700 mb-2">
-          Your booking at <strong>{venue.name}</strong> has been confirmed.
+          Your booking at <span className="font-extrabold">{venue.name}</span>{" "}
+          has been confirmed.
         </p>
         <p className="text-gray-700 mb-2">
           {nights} night{nights > 1 ? "s" : ""} - Total: $
