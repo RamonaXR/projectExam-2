@@ -4,6 +4,7 @@ import ErrorMessage from "../ErrorMessage";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
 import Modal from "../Modal";
 import { useAuthStore } from "../../store/authStore";
+import { toast } from "react-toastify";
 
 export default function EditProfileModal({ isOpen, onClose, profile }) {
   const {
@@ -34,6 +35,9 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
             ...updatedProfile,
             accessToken: currentProfile?.accessToken || "",
           });
+          toast.success("Profile updated successfully!", {
+            position: "top-center",
+          });
           onClose();
         },
       },
@@ -41,20 +45,28 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Profile">
+    <Modal isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block font-bold">Bio</label>
+          <label htmlFor="edit-bio" className="block font-bold">
+            Bio
+          </label>
           <textarea
+            id="edit-bio"
+            placeholder="Enter your bio"
             {...register("bio")}
             className="w-full border border-gray-300 p-2 rounded"
           ></textarea>
           {errors.bio && <ErrorMessage message={errors.bio.message} />}
         </div>
         <div>
-          <label className="block font-bold">Avatar URL</label>
+          <label htmlFor="edit-avatarUrl" className="block font-bold">
+            Avatar URL
+          </label>
           <input
+            id="edit-avatarUrl"
             type="text"
+            placeholder="Enter your avatar URL"
             {...register("avatarUrl")}
             className="w-full border border-gray-300 p-2 rounded"
           />
@@ -63,7 +75,7 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
           )}
         </div>
         {error && <ErrorMessage message={error.message} />}
-        <div className="flex justify-end">
+        <div className="flex justify-center mt-4">
           <Button type="submit" disabled={isLoading}>
             {isLoading ? "Updating..." : "Update Profile"}
           </Button>
