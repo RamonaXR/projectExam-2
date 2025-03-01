@@ -4,6 +4,9 @@ export const loginSchema = yup.object().shape({
   email: yup
     .string()
     .email("Must be a valid email")
+    .test("is-stud-email", "Email must be a @stud.noroff.no email", (value) =>
+      value ? value.toLowerCase().endsWith("@stud.noroff.no") : false,
+    )
     .required("Email is required"),
   password: yup
     .string()
@@ -16,6 +19,9 @@ export const registerSchema = yup.object().shape({
   email: yup
     .string()
     .email("Must be a valid email")
+    .test("is-stud-email", "Email must be a @stud.noroff.no email", (value) =>
+      value ? value.toLowerCase().endsWith("@stud.noroff.no") : false,
+    )
     .required("Email is required"),
   password: yup
     .string()
@@ -52,13 +58,13 @@ export const venueSchema = yup.object().shape({
     .max(8, "You can only add 8 images"),
   price: yup
     .number()
-    .typeError("Price must be a number")
+    .typeError("Price is required")
     .required("Price is required")
     .min(0, "Price cannot be negative")
     .max(10000, "Price cannot exceed 10,000"),
   maxGuests: yup
     .number()
-    .typeError("Max guests must be a number")
+    .typeError("Max guests is required")
     .required("Max guests is required")
     .min(1, "At least 1 guest is required")
     .max(100, "Max guests cannot exceed 100"),
