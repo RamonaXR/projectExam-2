@@ -1,4 +1,4 @@
-export default function AmenitiesCheckboxes({ register }) {
+export default function AmenitiesCheckboxes({ id, register }) {
   const amenities = [
     { name: "wifi", label: "WiFi" },
     { name: "parking", label: "Parking" },
@@ -7,16 +7,17 @@ export default function AmenitiesCheckboxes({ register }) {
   ];
 
   return (
-    <div className="space-y-2">
+    <div id={id} className="space-y-2">
       <span className="block font-bold">Amenities</span>
       {amenities.map((amenity) => (
         <div key={amenity.name} className="flex items-center">
           <input
+            id={`amenity-${amenity.name}`}
             type="checkbox"
             {...register(`meta.${amenity.name}`)}
             className="mr-2"
           />
-          <label>{amenity.label}</label>
+          <label htmlFor={`amenity-${amenity.name}`}>{amenity.label}</label>
         </div>
       ))}
     </div>
