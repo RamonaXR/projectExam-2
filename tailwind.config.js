@@ -5,12 +5,12 @@ export default {
     extend: {
       colors: {
         primary: "#B7E2C4", // Soft green
-        secondary: "#F6BE6F", // Warm orange
+        secondary: "#F6BE6F", // Toned down orange
         button: "#CF0C54", // Button color
       },
 
       fontFamily: {
-        sans: ["Lunasima", "sans-serif"],
+        sans: ["Poppins", "sans-serif"],
       },
       keyframes: {
         fadeIn: {
@@ -18,6 +18,7 @@ export default {
           "100%": { opacity: 1 },
         },
       },
+
       animation: {
         fadeIn: "fadeIn 0.5s ease-out",
       },
