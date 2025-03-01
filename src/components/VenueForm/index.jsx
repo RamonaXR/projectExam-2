@@ -9,6 +9,7 @@ import Modal from "../Modal";
 import AmenitiesCheckboxes from "../AmenitiesCheckboxes";
 import StarRating from "../StarRating";
 import ImageInput from "../ImageInput";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function VenueForm({
   initialValues,
@@ -26,7 +27,7 @@ export default function VenueForm({
     resolver: yupResolver(venueSchema),
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "mediaUrls",
   });
@@ -47,12 +48,13 @@ export default function VenueForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block font-bold">
+        <label htmlFor="venue-name" className="block font-bold">
           Name
         </label>
         <input
-          id="name"
+          id="venue-name"
           type="text"
+          placeholder="Enter venue name"
           {...register("name")}
           className="w-full border border-gray-300 p-2 rounded"
         />
@@ -60,11 +62,12 @@ export default function VenueForm({
       </div>
 
       <div>
-        <label htmlFor="description" className="block font-bold">
+        <label htmlFor="venue-description" className="block font-bold">
           Description
         </label>
         <textarea
-          id="description"
+          id="venue-description"
+          placeholder="Enter venue description"
           {...register("description")}
           className="w-full border border-gray-300 p-2 rounded"
         ></textarea>
@@ -74,38 +77,50 @@ export default function VenueForm({
       </div>
 
       <div>
-        <ImageInput append={append} fields={fields} />
+        <label htmlFor="image-input" className="block font-bold">
+          Add Images (Optional)
+        </label>
+        <ImageInput id="image-input" append={append} fields={fields} />
         {errors.mediaUrls && (
           <ErrorMessage message={errors.mediaUrls.message} />
         )}
       </div>
 
-      {fields.length > 0 && (
-        <div className="grid grid-cols-3 gap-2">
-          {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="cursor-pointer"
+      <div className="space-y-4">
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="relative p-2 border border-primary rounded shadow"
+          >
+            <SafeImage
+              src={field.url}
+              alt={`Image ${index + 1}`}
+              fallback="/img/placeholdervenue-3.jpg"
+              className="w-24 h-24 object-cover rounded cursor-pointer"
               onClick={() => openPreview(field.url)}
+            />
+            <button
+              type="button"
+              onClick={() => remove(index)}
+              className="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2"
             >
-              <SafeImage
-                src={field.url}
-                alt={`Image ${index + 1}`}
-                fallback="/img/placeholdervenue-3.jpg"
-                className="w-full h-20 object-cover rounded"
+              <AiOutlineClose
+                size={24}
+                className="text-red-600 bg-white rounded-full p-1"
               />
-            </div>
-          ))}
-        </div>
-      )}
+            </button>
+          </div>
+        ))}
+      </div>
 
       <div>
-        <label htmlFor="price" className="block font-bold">
-          Price
+        <label htmlFor="venue-price" className="block font-bold">
+          Price/ Night
         </label>
         <input
-          id="price"
-          type="text"
+          id="venue-price"
+          type="number"
+          placeholder="Enter price per night"
           {...register("price")}
           className="w-full border border-gray-300 p-2 rounded"
         />
@@ -113,12 +128,13 @@ export default function VenueForm({
       </div>
 
       <div>
-        <label htmlFor="maxGuests" className="block font-bold">
+        <label htmlFor="venue-maxGuests" className="block font-bold">
           Max Guests
         </label>
         <input
-          id="maxGuests"
-          type="text"
+          id="venue-maxGuests"
+          type="number"
+          placeholder="Enter maximum guests"
           {...register("maxGuests")}
           className="w-full border border-gray-300 p-2 rounded"
         />
@@ -128,12 +144,18 @@ export default function VenueForm({
       </div>
 
       <div>
-        <label className="block font-bold mb-1">Rating</label>
+        <label htmlFor="venue-rating" className="block font-bold mb-1">
+          Rating
+        </label>
         <Controller
           control={control}
           name="rating"
           render={({ field: { value, onChange } }) => (
-            <StarRating rating={value || 0} setRating={onChange} />
+            <StarRating
+              id="venue-rating"
+              rating={value || 0}
+              setRating={onChange}
+            />
           )}
         />
         {errors.rating && <ErrorMessage message={errors.rating.message} />}
@@ -143,17 +165,13 @@ export default function VenueForm({
         <AmenitiesCheckboxes register={register} />
       </div>
 
-      <div className="flex justify-end">
+      <div className="text-center">
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Submitting..." : buttonText}
         </Button>
       </div>
 
-      <Modal
-        isOpen={isPreviewModalOpen}
-        onClose={closePreview}
-        title="Image Preview"
-      >
+      <Modal isOpen={isPreviewModalOpen} onClose={closePreview}>
         {previewImage && (
           <SafeImage
             src={previewImage}
