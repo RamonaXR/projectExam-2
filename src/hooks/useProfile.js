@@ -4,7 +4,6 @@ import { useAuthStore } from "../store/authStore";
 
 export function useProfile(name, params = { _bookings: true, _venues: true }) {
   const token = useAuthStore((state) => state.userProfile?.accessToken);
-  console.log("useProfile token:", token);
   const queryKey = ["profile", name, params];
   return useQuery({
     queryKey,
