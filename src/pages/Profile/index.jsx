@@ -12,6 +12,21 @@ import SafeImage from "../../components/SafeImage";
 import { Helmet } from "react-helmet-async";
 import Loader from "../../components/Loader";
 
+/**
+ * Profile component displays the user's profile page.
+ *
+ * This component retrieves the logged-in user's profile data using the `useProfile` hook,
+ * along with any associated bookings and venues. If the user is a Venue Manager,
+ * it additionally fetches the venues they manage and displays bookings for those venues.
+ * An Edit Profile modal is available for updating profile information.
+ * If the user is not logged in, the component redirects to the login page.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered profile page.
+ *
+ * @example
+ * <Profile />
+ */
 export default function Profile() {
   const { userProfile } = useAuthStore();
   const name = userProfile?.name || "";
