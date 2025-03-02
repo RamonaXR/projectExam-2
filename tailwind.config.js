@@ -18,7 +18,11 @@ export default {
           "100%": { opacity: 1 },
         },
       },
-
+      container: {
+        screens: {
+          xl: "1150px",
+        },
+      },
       animation: {
         fadeIn: "fadeIn 0.5s ease-out",
       },

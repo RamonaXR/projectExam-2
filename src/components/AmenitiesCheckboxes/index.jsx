@@ -1,3 +1,15 @@
+/**
+ * AmenitiesCheckboxes is a React component that renders a list of checkboxes
+ * for selecting various amenities.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {string} props.id - The id for the container element.
+ * @param {Function} props.register - The register function (e.g., from react-hook-form)
+ *                                    used to register each input field.
+ * @returns {JSX.Element} The rendered list of amenity checkboxes.
+ */
+
 export default function AmenitiesCheckboxes({ id, register }) {
   const amenities = [
     { name: "wifi", label: "WiFi" },

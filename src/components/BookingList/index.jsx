@@ -6,18 +6,52 @@ import { useDeleteBooking } from "../../hooks/useDeleteBooking";
 import SafeImage from "../SafeImage";
 import Modal from "../Modal";
 
+/**
+ * BookingsList displays a list of upcoming bookings along with options to delete them.
+ *
+ * It renders booking details such as the booking dates, guest count, and venue information.
+ * Each booking includes a delete button which, when clicked, opens a confirmation modal.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Array<Object>} props.bookings - An array of booking objects.
+ * Each booking object should contain:
+ *   - {string|number} id - Unique identifier for the booking.
+ *   - {string} dateFrom - Start date of the booking.
+ *   - {string} dateTo - End date of the booking.
+ *   - {number} guests - Number of guests.
+ *   - {Object} venue - Venue details including:
+ *       - {string|number} id - Venue unique identifier.
+ *       - {string} name - Name of the venue.
+ *       - {Array<Object>} media - Array of media objects with at least a URL.
+ *
+ * @returns {JSX.Element} The rendered list of bookings.
+ */
 export default function BookingsList({ bookings }) {
   const { mutate: deleteBooking, isLoading, error } = useDeleteBooking();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [selectedVenueName, setSelectedVenueName] = useState("");
 
+  /**
+   * Handles the delete button click for a specific booking.
+   *
+   * Sets the selected booking and opens the confirmation modal.
+   *
+   * @param {string|number} bookingId - The unique identifier of the booking to delete.
+   * @param {string} venueName - The name of the venue associated with the booking.
+   */
   const handleDeleteClick = (bookingId, venueName) => {
     setSelectedBookingId(bookingId);
     setSelectedVenueName(venueName);
     setConfirmOpen(true);
   };
 
+  /**
+   * Confirms the deletion of the selected booking.
+   *
+   * Calls the deleteBooking mutation and resets the selection and modal state.
+   */
   const handleConfirmDelete = () => {
     deleteBooking(selectedBookingId);
     setConfirmOpen(false);

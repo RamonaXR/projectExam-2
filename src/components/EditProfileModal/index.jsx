@@ -6,6 +6,26 @@ import Modal from "../Modal";
 import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
 
+/**
+ * EditProfileModal displays a modal window with a form that allows users to edit their profile.
+ *
+ * The form includes fields for updating the bio and avatar URL, and uses react-hook-form
+ * for form state management and validation. On form submission, the profile is updated
+ * via a mutation, and upon success, the user's profile in the auth store is updated and
+ * a success toast is shown.
+ *
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.isOpen - Controls whether the modal is open.
+ * @param {Function} props.onClose - Callback function to close the modal.
+ * @param {Object} props.profile - The current user profile.
+ * @param {string} props.profile.bio - The current bio of the user.
+ * @param {Object} props.profile.avatar - The user's avatar object.
+ * @param {string} props.profile.avatar.url - The URL of the user's avatar.
+ * @param {string} props.profile.name - The user's name.
+ *
+ * @returns {JSX.Element} The rendered modal containing the edit profile form.
+ */
 export default function EditProfileModal({ isOpen, onClose, profile }) {
   const {
     register,
@@ -21,6 +41,16 @@ export default function EditProfileModal({ isOpen, onClose, profile }) {
   const { mutate: updateProfile, isLoading, error } = useUpdateProfile();
   const { setLogin } = useAuthStore();
 
+  /**
+   * Handles form submission by updating the user's profile.
+   *
+   * On a successful update, the auth store is updated with the new profile data,
+   * a success toast is shown, and the modal is closed.
+   *
+   * @param {Object} data - The form data.
+   * @param {string} data.bio - The updated bio.
+   * @param {string} data.avatarUrl - The updated avatar URL.
+   */
   const onSubmit = (data) => {
     updateProfile(
       {

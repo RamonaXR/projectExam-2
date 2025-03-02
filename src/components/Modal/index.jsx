@@ -2,6 +2,20 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
+/**
+ * Modal component displays a dialog modal using Headless UI's Dialog and Transition components.
+ *
+ * It renders an overlay with a fade-in/out animation and a panel containing the modal content.
+ * An optional title is displayed at the top, and a close button is provided to dismiss the modal.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {Function} props.onClose - Callback function invoked when the modal is requested to close.
+ * @param {React.ReactNode} [props.title] - Optional title displayed at the top of the modal.
+ * @param {React.ReactNode} props.children - The content to display inside the modal.
+ * @returns {JSX.Element} The rendered modal component.
+ */
 export default function Modal({ isOpen, onClose, title, children }) {
   return (
     <Transition show={isOpen} as={Fragment}>

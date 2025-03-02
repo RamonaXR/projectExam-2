@@ -3,6 +3,19 @@ import { useAuthStore } from "../../store/authStore";
 import { FiX } from "react-icons/fi";
 import Button from "../Button";
 
+/**
+ * MobileNav renders a full-screen mobile navigation menu overlay.
+ *
+ * This component displays a backdrop with a background image and a semi-transparent overlay.
+ * It shows the user's profile information if logged in, including an avatar and name,
+ * and provides navigation links based on the user's role (venue manager or customer).
+ * It also includes a logout button for authenticated users, or a login button if not authenticated.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Function} props.toggleMenu - Function to toggle the visibility of the mobile menu.
+ * @returns {JSX.Element} The rendered mobile navigation menu overlay.
+ */
 export default function MobileNav({ toggleMenu }) {
   const { isLoggedIn, userProfile, setLogout } = useAuthStore();
   const isVenueManager =
@@ -44,7 +57,7 @@ export default function MobileNav({ toggleMenu }) {
                     userProfile?.avatar?.url || "/img/placeholder-avatar.jpg"
                   }
                   alt={userProfile?.avatar?.alt || "User avatar"}
-                  className="w-28 h-28 rounded-full shadow-xl mb-3"
+                  className="w-28 h-28 rounded-full shadow-xl mb-3 object-cover"
                 />
                 <span className="font-bold text-3xl text-gray-100">
                   {userProfile?.name}

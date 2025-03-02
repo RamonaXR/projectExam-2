@@ -8,6 +8,19 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 
+/**
+ * Contact component renders the contact page for Holidaze.
+ *
+ * This component displays the contact information including phone number, address, email, and social media links.
+ * It also showcases some highlighted messages with icons, a grid of vacation photos, and uses Helmet to set the page title
+ * and meta description for SEO purposes.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Contact page.
+ *
+ * @example
+ * <Contact />
+ */
 export default function Contact() {
   return (
     <>
@@ -72,7 +85,7 @@ export default function Contact() {
             <img
               key={num}
               src={`/img/contact-${num}.jpg`}
-              alt={`Contact image ${num}`}
+              alt={`Vacation photos ${num}`}
               className="w-full h-32 object-cover rounded"
             />
           ))}

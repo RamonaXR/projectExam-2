@@ -1,5 +1,14 @@
 import * as yup from "yup";
 
+/**
+ * Schema for user login.
+ *
+ * Validates that:
+ * - email is a valid email ending with "@stud.noroff.no" and is required.
+ * - password is at least 8 characters long and is required.
+ *
+ * @type {yup.ObjectSchema}
+ */
 export const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -14,6 +23,18 @@ export const loginSchema = yup.object().shape({
     .required("Password is required"),
 });
 
+/**
+ * Schema for user registration.
+ *
+ * Validates that:
+ * - name is provided.
+ * - email is a valid email ending with "@stud.noroff.no" and is required.
+ * - password is at least 8 characters long and is required.
+ * - avatarUrl is a valid URL and is required.
+ * - bio is optional and cannot exceed 160 characters.
+ *
+ * @type {yup.ObjectSchema}
+ */
 export const registerSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup
@@ -34,6 +55,13 @@ export const registerSchema = yup.object().shape({
   bio: yup.string().max(160, "Bio must be 160 characters or less"),
 });
 
+/**
+ * Schema for validating a single image URL.
+ *
+ * Ensures that the URL field is provided and is a valid URL.
+ *
+ * @type {yup.ObjectSchema}
+ */
 export const singleUrlSchema = yup.object().shape({
   url: yup
     .string()
@@ -41,6 +69,19 @@ export const singleUrlSchema = yup.object().shape({
     .url("Must be a valid image URL"),
 });
 
+/**
+ * Schema for venue creation or editing.
+ *
+ * Validates that:
+ * - name and description are required.
+ * - mediaUrls, if provided, must be an array of objects with a valid URL each and no more than 8 items.
+ * - price is a required number between 0 and 10,000.
+ * - maxGuests is a required number between 1 and 100.
+ * - rating is a number between 0 and 5 (can be null).
+ * - meta is an object with boolean fields for wifi, parking, breakfast, and pets.
+ *
+ * @type {yup.ObjectSchema}
+ */
 export const venueSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
@@ -83,6 +124,16 @@ export const venueSchema = yup.object().shape({
   }),
 });
 
+/**
+ * Schema for booking a venue.
+ *
+ * Validates that:
+ * - startDate is a required date.
+ * - endDate is a required date that must be the same or later than the startDate.
+ * - guests is a required number between 1 and 100.
+ *
+ * @type {yup.ObjectSchema}
+ */
 export const bookingSchema = yup.object().shape({
   startDate: yup.date().required("Select a start date"),
   endDate: yup

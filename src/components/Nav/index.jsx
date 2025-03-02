@@ -1,6 +1,17 @@
 import { NavLink } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 
+/**
+ * Nav component renders the primary navigation menu for the application.
+ *
+ * It displays different navigation options based on the user's authentication status and role.
+ * - If the user is logged in and is a venue manager, links for "Add new venue" and "My venues" are shown.
+ * - If the user is logged in but not a venue manager, a link for "My bookings" is displayed.
+ * - The "Contact" link is always displayed.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered navigation menu.
+ */
 export default function Nav() {
   const { isLoggedIn, userProfile } = useAuthStore();
   const isVenueManager =

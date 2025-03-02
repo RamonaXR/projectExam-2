@@ -1,6 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { API_BASE_URL } from "../constants";
 
+/**
+ * Custom hook to fetch detailed data for a specific venue.
+ *
+ * This hook leverages react-query's useQuery to retrieve venue details from the API.
+ * It fetches information about the venue including owner details and bookings.
+ *
+ * @param {string|number} venueId - The unique identifier of the venue to fetch.
+ * @returns {object} The query object returned by useQuery, including properties such as data, isLoading, isError, and error.
+ *
+ * @example
+ * const { data, isLoading, isError } = useVenue("123");
+ */
 export function useVenue(venueId) {
   return useQuery({
     queryKey: ["venue", venueId],

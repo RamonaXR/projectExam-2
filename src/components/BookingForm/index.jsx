@@ -11,6 +11,13 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { bookingSchema } from "../../validation/validationSchemas";
 
+/**
+ * Generates an array of dates between two given dates (inclusive).
+ *
+ * @param {Date} start - The start date.
+ * @param {Date} end - The end date.
+ * @returns {Date[]} Array of dates from start to end.
+ */
 function getDatesBetween(start, end) {
   const dates = [];
   const current = new Date(start);
@@ -20,6 +27,20 @@ function getDatesBetween(start, end) {
   }
   return dates;
 }
+
+/**
+ * BookingForm component renders a form that allows users to book a venue.
+ *
+ * It includes date pickers for selecting the booking period, a counter for guests,
+ * displays the total number of nights and price, validates the form data against
+ * overlapping bookings, and handles booking submission.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {Object} props.venue - Venue details including pricing and existing bookings.
+ * @param {Function} [props.refetchProfile] - Optional function to refetch user profile after booking.
+ * @returns {JSX.Element} The rendered booking form.
+ */
 
 export default function BookingForm({ venue, refetchProfile }) {
   const { isLoggedIn, userProfile } = useAuthStore();
@@ -72,6 +93,15 @@ export default function BookingForm({ venue, refetchProfile }) {
     }
   }, [startDate, endDate, venue.price]);
 
+  /**
+   * Checks if the selected date range overlaps with any booked dates.
+   *
+   * @param {Date} start - The selected start date.
+   * @param {Date} end - The selected end date.
+   * @param {Date[]} bookedDates - Array of already booked dates.
+   * @returns {boolean} True if there is an overlap, false otherwise.
+   */
+
   const isOverlap = (start, end, bookedDates) => {
     const normalize = (date) =>
       new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -85,6 +115,15 @@ export default function BookingForm({ venue, refetchProfile }) {
     );
   };
 
+  /**
+   * Handles form submission, validates the booking criteria,
+   * and initiates the booking process.
+   *
+   * @param {Object} data - The form data.
+   * @param {Date} data.startDate - The booking start date.
+   * @param {Date} data.endDate - The booking end date.
+   * @param {number} data.guests - The number of guests.
+   */
   const onSubmit = (data) => {
     setBookingError("");
 
@@ -126,6 +165,15 @@ export default function BookingForm({ venue, refetchProfile }) {
     });
   };
 
+  /**
+   * Custom render function for displaying a day in the DatePicker.
+   *
+   * Highlights the day if it has been booked.
+   *
+   * @param {number} day - The day number.
+   * @param {Date} date - The date object corresponding to the day.
+   * @returns {JSX.Element} Rendered day content.
+   */
   const renderDay = (day, date) => {
     const isBooked = bookedDates.some(
       (booked) => booked.toDateString() === date.toDateString(),
@@ -218,9 +266,7 @@ export default function BookingForm({ venue, refetchProfile }) {
         )}
 
         <div>
-          <label htmlFor="guest-count" className="block font-bold mb-2">
-            Number of Guests
-          </label>
+          <span className="block font-bold mb-2">Number of Guests</span>
           <div className="flex items-center justify-center space-x-3">
             <button
               type="button"

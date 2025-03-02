@@ -2,6 +2,20 @@ import { useQuery } from "@tanstack/react-query";
 import { API_BASE_URL, API_KEY } from "../constants";
 import { useAuthStore } from "../store/authStore";
 
+/**
+ * Custom hook to fetch venues managed by a specific manager.
+ *
+ * This hook leverages react-query's useQuery to retrieve the venues for a given manager by their name.
+ * It sends a GET request to the API endpoint with the necessary headers, including an optional
+ * Authorization header if a user access token is available. The query is enabled only when a valid
+ * manager name is provided.
+ *
+ * @param {string} name - The manager's name or identifier for which to fetch venues.
+ * @returns {object} The query object returned by useQuery, containing properties such as data, isLoading, isError, error, etc.
+ *
+ * @example
+ * const { data, isLoading, isError } = useManagerVenues("managerName");
+ */
 export function useManagerVenues(name) {
   const token = useAuthStore.getState().userProfile?.accessToken;
 

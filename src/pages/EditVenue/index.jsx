@@ -8,6 +8,23 @@ import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import Loader from "../../components/Loader";
 
+/**
+ * EditVenue component allows a logged-in user to update an existing venue.
+ *
+ * It retrieves the venue ID from the URL parameters and fetches the current venue data using the `useVenue` hook.
+ * If the user is not logged in, they are redirected to the home page.
+ * When the venue data is loaded, it initializes a form using the VenueForm component.
+ * Upon submission, the updated data is sent via the `useEditVenue` hook.
+ * Successful updates trigger a success toast notification and redirect the user to the profile page.
+ * The component also uses Helmet to set the page metadata for SEO purposes.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered EditVenue component.
+ *
+ * @example
+ * // Rendered as part of a route:
+ * <Route path="/venue/:id/edit" element={<EditVenue />} />
+ */
 export default function EditVenue() {
   const { id } = useParams();
   const navigate = useNavigate();
