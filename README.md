@@ -41,8 +41,7 @@ Holidaze is an eco-friendly venue booking platform that connects travellers with
 ![Screen shot of the holidaze site](./public/img/screenshot1.jpg)
 ![Screen shot of the holidaze site](./public/img/screenshot2.jpg)
 ![Screen shot of the holidaze site](./public/img/screenshot3.jpg)
-![Screen shot of the holidaze site](./public/img/screenshot4.jpg)
-![Screen shot of the holidaze site](./public/img/screenshot5.jpg)
+![Screen shot of the holidaze site](./public/img/screenshot4jpg.jpg)
 
 ## User Stories
 
@@ -85,7 +84,7 @@ Holidaze is an eco-friendly venue booking platform that connects travellers with
 - **React Toastify** – Notifications.
 - **ESLint, Prettier, Husky, Lint-Staged** – Code quality and formatting tools.
 
-### Installation
+## Installation
 
 1. Clone the repository:
 
