@@ -7,12 +7,15 @@ import { FaWifi, FaPaw, FaUtensils, FaUserFriends } from "react-icons/fa";
 import BookingForm from "../../components/BookingForm";
 import ErrorMessage from "../../components/ErrorMessage";
 import { Helmet } from "react-helmet-async";
+import Loader from "../../components/Loader";
 
 export default function VenueDetails() {
   const { venueId } = useParams();
   const { data: venue, isLoading, isError, error } = useVenue(venueId);
 
-  if (isLoading) return <div className="text-center">Loading venue...</div>;
+  if (isLoading) {
+    return <Loader />;
+  }
   if (isError) return <ErrorMessage message={error.message} />;
 
   return (

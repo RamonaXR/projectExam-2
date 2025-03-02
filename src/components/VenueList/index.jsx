@@ -4,6 +4,7 @@ import ErrorMessage from "../ErrorMessage";
 import SearchBar from "../SearchBar";
 import SortDropdown from "../SortDropdown";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import Loader from "../Loader";
 
 export default function VenueList() {
   const {
@@ -26,8 +27,9 @@ export default function VenueList() {
 
   const observerRef = useInfiniteScroll(fetchNextPage, hasNextPage);
 
-  if (isLoading)
-    return <div className="text-center text-lg mt-4">Loading venues...</div>;
+  if (isLoading) {
+    return <Loader />;
+  }
   if (isError)
     return <ErrorMessage message={error.message} onRetry={refetch} />;
 

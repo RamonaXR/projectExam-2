@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import AddVenue from "./pages/AddVenue";
 import EditVenue from "./pages/EditVenue";
+import NotFound from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </div>
