@@ -11,6 +11,22 @@ import StarRating from "../StarRating";
 import ImageInput from "../ImageInput";
 import { AiOutlineClose } from "react-icons/ai";
 
+/**
+ * VenueForm component renders a form to create or update a venue.
+ *
+ * The form includes fields for the venue's name, description, images, price per night, maximum guests, rating,
+ * and amenities. It leverages react-hook-form with Yup validation for managing form state.
+ * Users can add images via an ImageInput component, preview and remove images, set the venue rating,
+ * and select various amenities.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Object} props.initialValues - The initial values for the form fields.
+ * @param {Function} props.onSubmit - Callback function to be invoked when the form is submitted.
+ * @param {boolean} props.isLoading - Indicates whether the form submission is in progress.
+ * @param {string} props.buttonText - The text to display on the submit button.
+ * @returns {JSX.Element} The rendered venue form.
+ */
 export default function VenueForm({
   initialValues,
   onSubmit,
@@ -35,11 +51,19 @@ export default function VenueForm({
   const [previewImage, setPreviewImage] = useState(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
+  /**
+   * Opens the preview modal to display the selected image.
+   *
+   * @param {string} imageUrl - The URL of the image to preview.
+   */
   const openPreview = (imageUrl) => {
     setPreviewImage(imageUrl);
     setIsPreviewModalOpen(true);
   };
 
+  /**
+   * Closes the image preview modal and clears the preview image.
+   */
   const closePreview = () => {
     setIsPreviewModalOpen(false);
     setPreviewImage(null);
@@ -144,9 +168,7 @@ export default function VenueForm({
       </div>
 
       <div>
-        <label htmlFor="venue-rating" className="block font-bold mb-1">
-          Rating
-        </label>
+        <span className="block font-bold mb-1">Rating</span>
         <Controller
           control={control}
           name="rating"
