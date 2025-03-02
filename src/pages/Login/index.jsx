@@ -5,6 +5,22 @@ import LoginForm from "../../components/LoginForm";
 import { useAuthStore } from "../../store/authStore";
 import { Helmet } from "react-helmet-async";
 
+/**
+ * Login component renders the login page for Holidaze.
+ *
+ * This component displays a login form allowing users to log in as either a Traveller or a Venue Manager.
+ * It uses the `useLogin` hook to perform the login API call and updates the authentication state via `useAuthStore`.
+ * After a successful login, the user is redirected to the URL specified in the "redirect" query parameter,
+ * or to the home page if no redirect is provided.
+ * The component also uses Helmet to set the page title and meta description for SEO purposes.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered login page.
+ *
+ * @example
+ * // In your routing configuration:
+ * <Route path="/login" element={<Login />} />
+ */
 export default function Login() {
   const {
     mutate: loginUser,
