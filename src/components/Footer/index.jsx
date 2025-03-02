@@ -1,3 +1,11 @@
+/**
+ * Footer component renders the website footer.
+ *
+ * It displays the logo, a navigation menu with links, and copyright information.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered footer element.
+ */
 export default function Footer() {
   return (
     <footer className="bg-gray-900 shadow">
