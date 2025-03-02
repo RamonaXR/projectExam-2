@@ -1,9 +1,10 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_BASE_URL, API_KEY } from "../constants";
 import { useAuthStore } from "../store/authStore";
 
 export function useBooking() {
   const token = useAuthStore((state) => state.userProfile?.accessToken);
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (bookingPayload) => {
@@ -25,6 +26,9 @@ export function useBooking() {
         );
       }
       return response.json();
+    },
+    onSuccess: (_, { venueId }) => {
+      queryClient.invalidateQueries({ queryKey: ["venue", venueId] });
     },
   });
 }
