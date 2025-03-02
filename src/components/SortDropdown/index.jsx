@@ -1,3 +1,18 @@
+/**
+ * SortDropdown component renders a dropdown menu for sorting items.
+ *
+ * It allows users to choose a sort criterion and order. When a new option is selected,
+ * the component splits the value to extract the sort field and order, then calls the
+ * respective setter functions.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string} props.sortBy - The current sort field (e.g., "created" or "name").
+ * @param {string} props.sortOrder - The current sort order ("asc" or "desc").
+ * @param {Function} props.setSortBy - Function to update the sort field.
+ * @param {Function} props.setSortOrder - Function to update the sort order.
+ * @returns {JSX.Element} The rendered dropdown for sorting.
+ */
 export default function SortDropdown({
   sortBy,
   sortOrder,
@@ -12,8 +27,12 @@ export default function SortDropdown({
 
   return (
     <div className="max-w-3xl mx-auto mb-6 text-right">
+      <label htmlFor="sort" className="sr-only">
+        Sort by
+      </label>
       <select
-        className="border border-gray-300 p-3 rounded-md text-gray-700 text-lg"
+        id="sort"
+        className="ring-1 ring-gray-300 border-r-8 border-r-transparent p-3 rounded-md text-gray-700 text-lg"
         value={`${sortBy}-${sortOrder}`}
         onChange={handleChange}
       >
