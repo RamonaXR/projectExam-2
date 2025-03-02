@@ -10,8 +10,7 @@ export default function VenueCard({ venue }) {
 
   return (
     <Link to={`/venue/${venue.id}`}>
-      <div className="border border-primary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300">
-        {/* Venue Image */}
+      <div className="border border-primary rounded-lg shadow-md overflow-hidden bg-white flex flex-col hover:shadow-lg transition-shadow duration-300 min-h-[450px]">
         <SafeImage
           src={imageUrl}
           alt={
@@ -24,43 +23,37 @@ export default function VenueCard({ venue }) {
           loading="lazy"
         />
         <div className="p-5 flex flex-col flex-grow">
-          {/* Venue Title */}
-          <h3 className="font-semibold text-lg text-gray-800 mb-2 truncate">
+          <h3 className="font-semibold text-2xl text-gray-800 mb-2 truncate">
             {venue.name}
           </h3>
-          {/* Owner Info */}
           <div className="flex items-center space-x-2 mb-3">
             <SafeImage
               src={venue.owner?.avatar?.url || "/img/placeholderavatar.jpg"}
               alt={venue.owner?.avatar?.alt || "Owner avatar"}
               fallback="/img/placeholderavatar.jpg"
-              className="w-9 h-9 rounded-full border border-gray-300"
+              className="w-9 h-9 rounded-full border border-gray-300 object-cover"
             />
-            <span className="text-sm text-gray-500">
-              {venue.owner?.name || "Unknown"}
+            <span className="ml-3 text-base text-gray-700">
+              {venue.owner?.name || "Unknown Owner"}
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-gray-600 text-sm mb-3">
-            {/* Max Guests */}
             <div className="flex items-center gap-1">
               <FaUserFriends className="text-base" />
               <span>{venue.maxGuests} guests</span>
             </div>
-            {/* Breakfast */}
             {venue.meta?.breakfast && (
               <div className="flex items-center gap-1">
                 <FaUtensils className="text-base" />
                 <span>Breakfast</span>
               </div>
             )}
-            {/* WiFi */}
             {venue.meta?.wifi && (
               <div className="flex items-center gap-1">
                 <FaWifi className="text-base" />
                 <span>WiFi</span>
               </div>
             )}
-            {/* Pets Allowed */}
             {venue.meta?.pets && (
               <div className="flex items-center gap-1">
                 <FaPaw className="text-base" />

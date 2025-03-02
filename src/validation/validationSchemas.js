@@ -55,7 +55,8 @@ export const venueSchema = yup.object().shape({
           .url("Must be a valid URL"),
       }),
     )
-    .max(8, "You can only add 8 images"),
+    .max(8, "You can only add up to 8 images")
+    .optional(),
   price: yup
     .number()
     .typeError("Price is required")
@@ -80,4 +81,17 @@ export const venueSchema = yup.object().shape({
     breakfast: yup.boolean(),
     pets: yup.boolean(),
   }),
+});
+
+export const bookingSchema = yup.object().shape({
+  startDate: yup.date().required("Select a start date"),
+  endDate: yup
+    .date()
+    .required("Select an end date")
+    .min(yup.ref("startDate"), "End date must be after start date"),
+  guests: yup
+    .number()
+    .required("Number of guests is required")
+    .min(1, "At least one guest is required")
+    .max(100, "Maximum 100 guests allowed"),
 });

@@ -7,6 +7,9 @@ import { useBooking } from "../../hooks/useBooking";
 import ErrorMessage from "../ErrorMessage";
 import Button from "../Button";
 import Modal from "../Modal";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { bookingSchema } from "../../validation/validationSchemas";
 
 function getDatesBetween(start, end) {
   const dates = [];
@@ -21,14 +24,30 @@ function getDatesBetween(start, end) {
 export default function BookingForm({ venue, refetchProfile }) {
   const { isLoggedIn, userProfile } = useAuthStore();
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [guests, setGuests] = useState(1);
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      startDate: null,
+      endDate: null,
+      guests: 1,
+    },
+    resolver: yupResolver(bookingSchema),
+  });
+
   const [nights, setNights] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [bookingError, setBookingError] = useState("");
-
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+  const guests = watch("guests");
 
   const bookedDates =
     venue.bookings && venue.bookings.length > 0
@@ -53,8 +72,20 @@ export default function BookingForm({ venue, refetchProfile }) {
     }
   }, [startDate, endDate, venue.price]);
 
-  const handleBooking = (e) => {
-    e.preventDefault();
+  const isOverlap = (start, end, bookedDates) => {
+    const normalize = (date) =>
+      new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const normalizedStart = normalize(start);
+    const normalizedEnd = normalize(end);
+    const selectedDates = getDatesBetween(normalizedStart, normalizedEnd);
+    return selectedDates.some((date) =>
+      bookedDates.some(
+        (booked) => normalize(booked).toDateString() === date.toDateString(),
+      ),
+    );
+  };
+
+  const onSubmit = (data) => {
     setBookingError("");
 
     if (!isLoggedIn) {
@@ -67,16 +98,24 @@ export default function BookingForm({ venue, refetchProfile }) {
       );
       return;
     }
-    if (!startDate || !endDate) {
+    if (!data.startDate || !data.endDate) {
       setBookingError("Please select both start and end dates.");
+      return;
+    }
+    if (nights < 1) {
+      setBookingError("The booking must be at least 1 night.");
+      return;
+    }
+    if (isOverlap(data.startDate, data.endDate, bookedDates)) {
+      setBookingError("Selected dates overlap with an existing booking.");
       return;
     }
 
     const bookingPayload = {
       venueId: venue.id,
-      dateFrom: startDate.toISOString(),
-      dateTo: endDate.toISOString(),
-      guests,
+      dateFrom: data.startDate.toISOString(),
+      dateTo: data.endDate.toISOString(),
+      guests: data.guests,
     };
 
     bookingMutation.mutate(bookingPayload, {
@@ -95,10 +134,9 @@ export default function BookingForm({ venue, refetchProfile }) {
       return (
         <div
           style={{
-            backgroundColor: "#fca5a5",
+            backgroundColor: "#d32f2f",
             color: "white",
             borderRadius: "50%",
-            padding: "0.25rem",
           }}
         >
           {day}
@@ -117,35 +155,59 @@ export default function BookingForm({ venue, refetchProfile }) {
         <ErrorMessage message={bookingMutation.error.message} />
       )}
 
-      <form onSubmit={handleBooking} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block font-bold mb-2">Select dates</label>
-          <div className="flex flex-col md:flex-row md:space-x-4 justify-center px-2">
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              minDate={new Date()}
-              excludeDates={bookedDates}
-              renderDayContents={renderDay}
-              className="w-full border border-gray-300 p-2 rounded-md mb-2 md:mb-0 text-center"
-              placeholderText="Select start date"
-            />
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate || new Date()}
-              excludeDates={bookedDates}
-              renderDayContents={renderDay}
-              className="w-full border border-gray-300 p-2 rounded-md text-center"
-              placeholderText="Select end date"
-            />
-          </div>
+          <label htmlFor="start-date" className="block font-bold mb-2">
+            Select Start Date
+          </label>
+          <Controller
+            control={control}
+            name="startDate"
+            render={({ field }) => (
+              <DatePicker
+                id="start-date"
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                selectsStart
+                startDate={field.value}
+                endDate={endDate}
+                minDate={new Date()}
+                excludeDates={bookedDates}
+                renderDayContents={renderDay}
+                className="w-full border border-gray-300 p-2 rounded-md mb-2 md:mb-0 text-center"
+                placeholderText="Select start date"
+              />
+            )}
+          />
+          {errors.startDate && (
+            <ErrorMessage message={errors.startDate.message} />
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="end-date" className="block font-bold mb-2">
+            Select End Date
+          </label>
+          <Controller
+            control={control}
+            name="endDate"
+            render={({ field }) => (
+              <DatePicker
+                id="end-date"
+                selected={field.value}
+                onChange={(date) => field.onChange(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={field.value}
+                minDate={startDate || new Date()}
+                excludeDates={bookedDates}
+                renderDayContents={renderDay}
+                className="w-full border border-gray-300 p-2 rounded-md text-center"
+                placeholderText="Select end date"
+              />
+            )}
+          />
+          {errors.endDate && <ErrorMessage message={errors.endDate.message} />}
         </div>
 
         {startDate && endDate && (
@@ -156,24 +218,35 @@ export default function BookingForm({ venue, refetchProfile }) {
         )}
 
         <div>
-          <label className="block font-bold mb-2">Number of guests</label>
+          <label htmlFor="guest-count" className="block font-bold mb-2">
+            Number of Guests
+          </label>
           <div className="flex items-center justify-center space-x-3">
             <button
               type="button"
-              onClick={() => setGuests(Math.max(1, guests - 1))}
+              onClick={() => {
+                const currentGuests = parseInt(guests, 10) || 1;
+                setValue("guests", Math.max(1, currentGuests - 1));
+              }}
               className="bg-gray-200 px-3 py-1 rounded"
             >
               -
             </button>
-            <span className="text-xl font-bold">{guests}</span>
+            <span id="guest-count" className="text-xl font-bold">
+              {guests}
+            </span>
             <button
               type="button"
-              onClick={() => setGuests(Math.min(100, guests + 1))}
+              onClick={() => {
+                const currentGuests = parseInt(guests, 10) || 1;
+                setValue("guests", Math.min(100, currentGuests + 1));
+              }}
               className="bg-gray-200 px-3 py-1 rounded"
             >
               +
             </button>
           </div>
+          {errors.guests && <ErrorMessage message={errors.guests.message} />}
         </div>
 
         <div className="flex flex-col items-center space-y-4">
@@ -197,7 +270,7 @@ export default function BookingForm({ venue, refetchProfile }) {
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
         title={
-          <span className="font-extrabold text-1xl">Booking Confirmed!</span>
+          <span className="font-extrabold text-xl">Booking Confirmed!</span>
         }
       >
         <p className="text-gray-700 mb-2">

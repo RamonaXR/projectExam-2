@@ -20,12 +20,7 @@ function formatVenuePayload(venueData) {
             url: item.url,
             alt: "Venue image",
           }))
-        : [
-            {
-              url: "/img/placeholdervenue-3.jpg",
-              alt: "Placeholder image",
-            },
-          ],
+        : [],
     price: Number(venueData.price),
     maxGuests: Number(venueData.maxGuests),
     rating: Number(venueData.rating) || 0,

@@ -38,23 +38,22 @@ export default function VenuesList({ venues }) {
             key={venue.id}
             className="border p-4 rounded shadow flex flex-col md:flex-row md:items-center md:justify-between"
           >
-            <div className="flex items-center space-x-4 mb-2 md:mb-0">
-              <Link to={`/venue/${venue.id}`}>
-                <SafeImage
-                  src={venue.media && venue.media[0]?.url}
-                  fallback="/img/placeholdervenue-3.jpg"
-                  alt={venue.name}
-                  className="w-24 h-24 object-cover rounded"
-                />
-              </Link>
+            <Link
+              to={`/venue/${venue.id}`}
+              className="flex items-center space-x-4 flex-1"
+            >
+              <SafeImage
+                src={venue.media && venue.media[0]?.url}
+                fallback="/img/placeholdervenue-3.jpg"
+                alt={venue.name}
+                className="w-24 h-24 object-cover rounded"
+              />
               <div>
-                <Link to={`/venue/${venue.id}`} className="font-bold text-lg">
-                  {venue.name}
-                </Link>
+                <p className="font-bold text-lg">{venue.name}</p>
                 <p className="text-gray-600">Price: ${venue.price} / night</p>
               </div>
-            </div>
-            <div className="flex space-x-2">
+            </Link>
+            <div className="flex space-x-2 mt-4 md:mt-0">
               <Link to={`/venue/${venue.id}/edit`}>
                 <Button>Edit</Button>
               </Link>

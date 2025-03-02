@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-md" role="banner">
-      <div className="flex items-center justify-between p-4">
+      <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8 flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <Link to="/" aria-label="Home">
             <img
@@ -39,7 +39,7 @@ export default function Header() {
                     userProfile?.avatar?.url || "/img/placeholder-avatar.jpg"
                   }
                   alt={userProfile?.avatar?.alt || "User avatar"}
-                  className="w-8 h-8 rounded-full"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
                 <span className="font-bold text-gray-700">
                   {userProfile?.name}
