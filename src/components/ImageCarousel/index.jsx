@@ -1,6 +1,21 @@
 import { useState } from "react";
 import SafeImage from "../SafeImage";
 
+/**
+ * ImageCarousel renders an interactive image carousel.
+ *
+ * If the provided images array is empty or undefined, the carousel will display
+ * a single slide using the fallback image. Users can navigate through the slides
+ * using next/prev buttons and navigation dots.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Array<Object>} props.images - An array of image objects. Each object should have:
+ *   - {string} url - The URL of the image.
+ *   - {string} [alt] - Optional alternative text for the image.
+ * @param {string} props.fallback - The fallback image URL used when no images are provided.
+ * @returns {JSX.Element|null} The rendered image carousel, or null if no slides are available.
+ */
 export default function ImageCarousel({ images, fallback }) {
   const slides =
     images && images.length > 0
