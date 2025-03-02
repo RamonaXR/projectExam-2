@@ -1,5 +1,18 @@
 import Button from "../Button";
 
+/**
+ * SearchBar component renders a search input field along with a search button.
+ *
+ * It allows users to enter a search term to look for venues and triggers a search
+ * either on pressing the Enter key or by clicking the search button.
+ *
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {string} props.searchInput - The current value of the search input field.
+ * @param {Function} props.setSearchInput - Function to update the search input state.
+ * @param {Function} props.setSearchQuery - Function to set the search query and trigger a search.
+ * @returns {JSX.Element} The rendered search bar component.
+ */
 export default function SearchBar({
   searchInput,
   setSearchInput,
