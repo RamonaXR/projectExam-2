@@ -4,6 +4,22 @@ import { useRegister } from "../../hooks/useRegister";
 import RegisterForm from "../../components/RegisterForm";
 import { Helmet } from "react-helmet-async";
 
+/**
+ * Register component renders the registration page for Holidaze.
+ *
+ * This component provides a form for users to register on Holidaze as either a Traveller or a Venue Manager.
+ * It uses the `useRegister` hook to handle the registration process. When the form is submitted, it constructs a payload
+ * that includes the user's details, a flag indicating if they are registering as a Venue Manager, and an avatar object.
+ * Upon successful registration, the user is redirected to the login page after a 3-second delay.
+ *
+ * Helmet is used to set the page title and meta description for SEO purposes.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered registration page.
+ *
+ * @example
+ * <Register />
+ */
 export default function Register() {
   const [isVenueManager, setIsVenueManager] = useState(false);
   const {
@@ -15,6 +31,16 @@ export default function Register() {
   } = useRegister();
   const navigate = useNavigate();
 
+  /**
+   * Handles form submission by constructing the registration payload and invoking the register mutation.
+   *
+   * @param {Object} data - The form data from the registration form.
+   * @param {string} data.name - The user's name.
+   * @param {string} data.email - The user's email address.
+   * @param {string} data.password - The user's password.
+   * @param {string} data.bio - The user's biography.
+   * @param {string} data.avatarUrl - The URL of the user's avatar image.
+   */
   const onSubmit = (data) => {
     const payload = {
       name: data.name,
