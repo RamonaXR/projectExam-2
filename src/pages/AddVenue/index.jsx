@@ -6,6 +6,22 @@ import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 
+/**
+ * AddVenue component renders a form for creating a new venue.
+ *
+ * This component checks if the user is logged in and redirects to the home page if not.
+ * It initializes the form with default values and uses the VenueForm component to collect venue data.
+ * Upon submission, the useAddVenue hook is used to send the data to the API. On successful creation,
+ * a success toast is displayed and the user is redirected to the profile page. The page's metadata is set
+ * using Helmet.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered AddVenue component.
+ *
+ * @example
+ * // In your router configuration, render <AddVenue /> for the add venue route.
+ * <Route path="/venue/add" element={<AddVenue />} />
+ */
 export default function AddVenue() {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuthStore();
