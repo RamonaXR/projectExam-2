@@ -5,6 +5,42 @@ import { fetchFn } from "../utils/fetchUtils";
 import { updateSearchParams } from "../utils/queryUtils";
 import { API_BASE_URL } from "../constants";
 
+/**
+ * Custom hook to fetch venues with infinite scrolling, sorting, and search filtering.
+ *
+ * This hook leverages react-query's useInfiniteQuery to fetch venue data from an API endpoint
+ * that supports pagination. It also manages local state for sorting and search, and synchronizes
+ * these values with the URL's search parameters using react-router's useSearchParams.
+ *
+ * The hook constructs the API endpoint dynamically based on the current search query and sorting
+ * options, and returns the query object along with state values and setters for sortBy, sortOrder,
+ * searchInput, and searchQuery.
+ *
+ * @returns {object} An object containing:
+ *   - All properties returned by useInfiniteQuery (e.g., data, isLoading, isError, fetchNextPage, etc.)
+ *   - sortBy {string}: The current field used for sorting venues.
+ *   - setSortBy {Function}: Function to update the sortBy state.
+ *   - sortOrder {string}: The current sort order ("asc" or "desc").
+ *   - setSortOrder {Function}: Function to update the sortOrder state.
+ *   - searchInput {string}: The current search input value.
+ *   - setSearchInput {Function}: Function to update the searchInput state.
+ *   - setSearchQuery {Function}: Function to update the search query and trigger a refetch.
+ *
+ * @example
+ * const {
+ *   data,
+ *   isLoading,
+ *   isError,
+ *   fetchNextPage,
+ *   sortBy,
+ *   setSortBy,
+ *   sortOrder,
+ *   setSortOrder,
+ *   searchInput,
+ *   setSearchInput,
+ *   setSearchQuery
+ * } = useVenues();
+ */
 export function useVenues() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "created");
