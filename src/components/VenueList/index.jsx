@@ -6,6 +6,16 @@ import SortDropdown from "../SortDropdown";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import Loader from "../Loader";
 
+/**
+ * VenueList component renders a list of venue cards with search and sorting functionality.
+ *
+ * It uses the `useVenues` hook to fetch venue data with support for infinite scrolling,
+ * sorting, and searching. The component displays a search bar, a sort dropdown, a grid of venue cards,
+ * and handles loading and error states.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered venue list component.
+ */
 export default function VenueList() {
   const {
     data,
