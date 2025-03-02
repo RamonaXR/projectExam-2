@@ -4,6 +4,24 @@ import { registerSchema } from "../../validation/validationSchemas";
 import ErrorMessage from "../ErrorMessage";
 import Button from "../Button";
 
+/**
+ * RegisterForm component renders a registration form for users to sign up as either a Traveller or a Venue Manager.
+ *
+ * It includes fields for name, email, password, bio (optional), and avatar URL. The component also
+ * allows toggling between registration roles using two buttons. Form state is managed with react-hook-form
+ * and validated using a Yup schema.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Function} props.onSubmit - Callback function to be called with form data upon submission.
+ * @param {boolean} props.isLoading - Indicates whether the registration request is currently in progress.
+ * @param {boolean} props.isError - Indicates whether an error occurred during registration.
+ * @param {Object} props.error - An error object containing error details to display.
+ * @param {boolean} props.isSuccess - Indicates whether registration was successful.
+ * @param {boolean} props.isVenueManager - Flag determining if the user is registering as a Venue Manager.
+ * @param {Function} props.setIsVenueManager - Function to toggle the user role between Venue Manager and Traveller.
+ * @returns {JSX.Element} The rendered registration form.
+ */
 export default function RegisterForm({
   onSubmit,
   isLoading,
