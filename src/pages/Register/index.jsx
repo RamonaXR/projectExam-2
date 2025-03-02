@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "../../hooks/useRegister";
 import RegisterForm from "../../components/RegisterForm";
+import { Helmet } from "react-helmet-async";
 
 export default function Register() {
   const [isVenueManager, setIsVenueManager] = useState(false);
@@ -38,25 +39,33 @@ export default function Register() {
   }, [isSuccess, navigate]);
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: 'url("/img/chairview.jpg")' }}
-    >
-      <div className="bg-white bg-opacity-90 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-full max-w-md md:max-w-lg">
-        <h1 className="text-3xl font-bold text-center text-gray-700 mb-6">
-          Register
-        </h1>
-
-        <RegisterForm
-          onSubmit={onSubmit}
-          isLoading={isLoading}
-          isError={isError}
-          error={error}
-          isSuccess={isSuccess}
-          isVenueManager={isVenueManager}
-          setIsVenueManager={setIsVenueManager}
+    <>
+      <Helmet>
+        <title>Register | Holidaze</title>
+        <meta
+          name="description"
+          content="Register on Holidaze as a Traveller to book venues or as a Venue Manager to add and manage venues."
         />
+      </Helmet>
+      <div
+        className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
+        style={{ backgroundImage: 'url("/img/chairview.jpg")' }}
+      >
+        <div className="bg-white bg-opacity-90 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-full max-w-md md:max-w-lg">
+          <h1 className="text-3xl font-bold text-center text-gray-700 mb-6">
+            Register
+          </h1>
+          <RegisterForm
+            onSubmit={onSubmit}
+            isLoading={isLoading}
+            isError={isError}
+            error={error}
+            isSuccess={isSuccess}
+            isVenueManager={isVenueManager}
+            setIsVenueManager={setIsVenueManager}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

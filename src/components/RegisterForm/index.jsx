@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../validation/validationSchemas";
 import ErrorMessage from "../ErrorMessage";
+import Button from "../Button";
 
 export default function RegisterForm({
   onSubmit,
@@ -22,6 +23,11 @@ export default function RegisterForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <p className="text-gray-700 mb-2">
+        Sign up as a <strong>Traveller</strong> to book a Holidaze, or as a{" "}
+        <strong>Venue Manager</strong> to add and manage venues.
+      </p>
+
       <div className="flex mb-6 border rounded-full overflow-hidden">
         <button
           type="button"
@@ -44,7 +50,11 @@ export default function RegisterForm({
       </div>
 
       <div>
+        <label htmlFor="register-name" className="block font-bold mb-1">
+          Name
+        </label>
         <input
+          id="register-name"
           type="text"
           placeholder="Name"
           {...register("name")}
@@ -52,8 +62,13 @@ export default function RegisterForm({
         />
         {errors.name && <ErrorMessage message={errors.name.message} />}
       </div>
+
       <div>
+        <label htmlFor="register-email" className="block font-bold mb-1">
+          Email
+        </label>
         <input
+          id="register-email"
           type="email"
           placeholder="Email (@stud.noroff.no)"
           {...register("email")}
@@ -61,8 +76,13 @@ export default function RegisterForm({
         />
         {errors.email && <ErrorMessage message={errors.email.message} />}
       </div>
+
       <div>
+        <label htmlFor="register-password" className="block font-bold mb-1">
+          Password
+        </label>
         <input
+          id="register-password"
           type="password"
           placeholder="Password (min 8 characters)"
           {...register("password")}
@@ -70,16 +90,26 @@ export default function RegisterForm({
         />
         {errors.password && <ErrorMessage message={errors.password.message} />}
       </div>
+
       <div>
+        <label htmlFor="register-bio" className="block font-bold mb-1">
+          Bio (optional)
+        </label>
         <textarea
-          placeholder="Bio (optional)"
+          id="register-bio"
+          placeholder="Tell us about yourself"
           {...register("bio")}
           className="w-full border border-gray-300 p-3 rounded-md"
         />
         {errors.bio && <ErrorMessage message={errors.bio.message} />}
       </div>
+
       <div>
+        <label htmlFor="register-avatarUrl" className="block font-bold mb-1">
+          Avatar URL
+        </label>
         <input
+          id="register-avatarUrl"
           type="text"
           placeholder="Avatar URL (required)"
           {...register("avatarUrl")}
@@ -97,13 +127,13 @@ export default function RegisterForm({
           Registration successful! Redirecting to login...
         </div>
       ) : (
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
           className="w-full bg-button text-white py-3 rounded-md transition-colors duration-300"
         >
           {isLoading ? "Registering..." : "Register"}
-        </button>
+        </Button>
       )}
     </form>
   );

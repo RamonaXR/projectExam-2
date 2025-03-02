@@ -36,17 +36,19 @@ export default function BookingsList({ bookings }) {
         {bookings.map((booking) => (
           <div
             key={booking.id}
-            className="border p-4 rounded shadow flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            className="border p-4 rounded shadow flex flex-col gap-4 sm:flex-row sm:items-center justify-between"
           >
-            <div className="flex items-center gap-4">
-              <Link to={`/venue/${booking.venue?.id || ""}`}>
-                <SafeImage
-                  src={booking.venue?.media && booking.venue.media[0]?.url}
-                  fallback="/img/placeholdervenue-3.jpg"
-                  alt={booking.venue?.name || "Venue"}
-                  className="w-24 h-24 object-cover rounded"
-                />
-              </Link>
+            {/* Wrap image and details in a Link */}
+            <Link
+              to={`/venue/${booking.venue?.id || ""}`}
+              className="flex items-center gap-4 flex-1"
+            >
+              <SafeImage
+                src={booking.venue?.media && booking.venue.media[0]?.url}
+                fallback="/img/placeholdervenue-3.jpg"
+                alt={booking.venue?.name || "Venue"}
+                className="w-24 h-24 object-cover rounded"
+              />
               <div>
                 <p>
                   {new Date(booking.dateFrom).toLocaleDateString()} -{" "}
@@ -54,8 +56,7 @@ export default function BookingsList({ bookings }) {
                 </p>
                 <p>Guests: {booking.guests}</p>
               </div>
-            </div>
-
+            </Link>
             <Button
               onClick={() =>
                 handleDeleteClick(

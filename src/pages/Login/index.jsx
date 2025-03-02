@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import LoginForm from "../../components/LoginForm";
 import { useAuthStore } from "../../store/authStore";
+import { Helmet } from "react-helmet-async";
 
 export default function Login() {
   const {
@@ -37,16 +38,26 @@ export default function Login() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: 'url("/img/foggybeach.jpg")' }}
     >
-      <div className="bg-white bg-opacity-80 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-full max-w-md md:max-w-lg">
-        <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
-
+      <Helmet>
+        <title>Login | Holidaze</title>
+        <meta
+          name="description"
+          content="Log in to Holidaze as a Traveller to book venues or as a Venue Manager to add and manage venues."
+        />
+      </Helmet>
+      <div className="bg-white bg-opacity-80 p-4 sm:p-6 md:p-8 rounded-md shadow-lg w-full max-w-[320px] sm:max-w-sm md:max-w-md mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-4">Login</h1>
+        <p className="text-center text-gray-700 mb-4">
+          Please log in as <span className="font-bold">Traveller</span> to book
+          venues, or as a <span className="font-bold">Venue Manager</span> to
+          add and manage venues.
+        </p>
         <LoginForm
           onSubmit={onSubmit}
           isLoading={isLoading}
           isError={isError}
           error={error}
         />
-
         <div className="mt-4 text-center text-gray-700">
           Not already a member?{" "}
           <Link
