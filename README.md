@@ -12,7 +12,7 @@
 [![ESLint](https://img.shields.io/badge/ESLint--4B32C3?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)  
 [![Headless UI](https://img.shields.io/badge/Headless_UI--3B82F6?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://headlessui.dev/)
 
-![Project Logo](/logoholidaze.svg)
+![Project Logo](./public/logoholidaze.svg)
 
 Holidaze is an eco-friendly venue booking platform that connects travellers with amazing venues and helps venue managers list and manage their properties. Built with modern React libraries and tools, Holidaze provides a smooth user experience with robust form validation, state management, and fast performance.
 
