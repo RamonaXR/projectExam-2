@@ -6,6 +6,16 @@ import MobileNav from "../MobileNav";
 import Nav from "../Nav";
 import Button from "../Button";
 
+/**
+ * Header component renders the top navigation bar of the application.
+ *
+ * It displays the site logo, navigation links, and user authentication actions.
+ * Depending on the user's login status, it shows either the profile link with a logout button
+ * or a login button. It also includes a mobile menu toggle that reveals the MobileNav component on smaller screens.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered header component.
+ */
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedIn, userProfile, setLogout } = useAuthStore();
