@@ -6,6 +6,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { useAuthStore } from "../../store/authStore";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
+import Loader from "../../components/Loader";
 
 export default function EditVenue() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function EditVenue() {
   }
 
   if (isLoading) {
-    return <div className="text-center">Loading venue details...</div>;
+    return <Loader />;
   }
   if (isError) {
     return <ErrorMessage message={error.message} />;

@@ -10,6 +10,7 @@ import Button from "../../components/Button";
 import ErrorMessage from "../../components/ErrorMessage";
 import SafeImage from "../../components/SafeImage";
 import { Helmet } from "react-helmet-async";
+import Loader from "../../components/Loader";
 
 export default function Profile() {
   const { userProfile } = useAuthStore();
@@ -38,7 +39,9 @@ export default function Profile() {
     return <Navigate to="/login" replace />;
   }
 
-  if (isLoading) return <div className="text-center">Loading profile...</div>;
+  if (isLoading) {
+    return <Loader />;
+  }
   if (isError || !profile) {
     return (
       <ErrorMessage message={error ? error.message : "Profile not found"} />
