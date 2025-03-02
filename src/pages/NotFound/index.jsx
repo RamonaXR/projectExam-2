@@ -1,6 +1,18 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
+/**
+ * NotFound component renders a 404 error page for Holidaze.
+ *
+ * This component displays a 404 error message with a background image and a call-to-action button
+ * that navigates the user back to the home page. Helmet is used to set the page title and meta description.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered 404 Not Found page.
+ *
+ * @example
+ * <NotFound />
+ */
 export default function NotFound() {
   return (
     <div
