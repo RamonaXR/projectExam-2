@@ -9,6 +9,22 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { Helmet } from "react-helmet-async";
 import Loader from "../../components/Loader";
 
+/**
+ * VenueDetails component displays detailed information about a specific venue.
+ *
+ * It fetches venue data based on the `venueId` URL parameter using the `useVenue` hook.
+ * The component displays an image carousel of the venue's images, basic venue information
+ * (name, price, rating, amenities, description), and the venue owner's details.
+ * Additionally, a BookingForm is rendered to allow users to create a booking for the venue.
+ * SEO metadata is managed via Helmet.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered venue details page.
+ *
+ * @example
+ * // In your routing configuration:
+ * <Route path="/venue/:venueId" element={<VenueDetails />} />
+ */
 export default function VenueDetails() {
   const { venueId } = useParams();
   const { data: venue, isLoading, isError, error } = useVenue(venueId);
@@ -32,7 +48,7 @@ export default function VenueDetails() {
         />
         <meta name="venue-id" content={venue.id} />
       </Helmet>
-      <div className="max-w-6xl mx-auto p-4">
+      <div className="container mx-auto p-4">
         <div className="mb-6">
           <ImageCarousel
             images={venue.media || []}
