@@ -4,6 +4,18 @@ import Button from "../../components/Button";
 import { useAuthStore } from "../../store/authStore";
 import { Helmet } from "react-helmet-async";
 
+/**
+ * Home component renders the landing page of the Holidaze application.
+ *
+ * The page includes a hero section with a background image and call-to-action (CTA) for new users to register,
+ * and displays a list of available venues using the VenueList component. It also sets up SEO metadata using Helmet.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Home component.
+ *
+ * @example
+ * <Home />
+ */
 export default function Home() {
   const { isLoggedIn } = useAuthStore();
 
