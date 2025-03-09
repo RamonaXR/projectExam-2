@@ -98,6 +98,19 @@ git clone git@github.com:RamonaXR/projectExam-2.git
 npm install
 ```
 
+### Setting Up Environment Variables
+
+This project requires an environment variable to run the application. Create a `.env` file in the root directory of the project and add the following variable:
+
+```
+VITE_API_KEY=
+```
+
+**To obtain and configure an API key:**
+
+1. Visit the [Noroff API documentation](https://docs.noroff.dev/docs/v2/auth/api-key) to generate an API key.
+2. Use the generated API key as the value for `VITE_API_KEY` in the `.env` file.
+
 ### Running
 
 To run the app in development mode, use the following command:
